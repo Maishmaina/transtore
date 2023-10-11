@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import Home from "@/pages/Home.vue";
+import Login from "@/pages/Login.vue";
+import ForgotPassword from "@/pages/ForgotPassword.vue";
+import ResetPassword from "@/pages/ResetPassword.vue";
 import NotFound from "@/pages/NotFound.vue";
 
 const router = createRouter({
@@ -8,8 +11,28 @@ const router = createRouter({
     routes: [
         {
             path: "/",
-            name: "Home",
+            name: "home",
             component: Home,
+        },
+        {
+            path: "/auth",
+            children: [
+                {
+                    path: "login",
+                    name: "login",
+                    component: Login,
+                },
+                {
+                    path: "forgot-password",
+                    name: "forgot-password",
+                    component: ForgotPassword,
+                },
+                {
+                    path: "reset-password",
+                    name: "reset-password",
+                    component: ResetPassword,
+                },
+            ],
         },
         {
             path: "/:pathMatch(.*)*",

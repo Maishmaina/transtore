@@ -1,7 +1,9 @@
 <template>
-    <div>This is the home page</div>
+    <Main page-name="Home"></Main>
 </template>
 
-<script setup></script>
+<script setup>
+import Main from '@/components/Main.vue'
+</script>
 
 <style lang="scss" scoped></style>
