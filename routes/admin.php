@@ -12,6 +12,6 @@ Route::prefix('admin')->group(function () {
     Route::post('reset-password', [AdminAuthController::class, 'resetPassword']);
 
     Route::middleware('auth:admin_api')->group(function () {
-        Route::post('logout', [AdminAuthController::class, 'logout']);
+        Route::delete('logout', [AdminAuthController::class, 'logout']);
     });
 });
