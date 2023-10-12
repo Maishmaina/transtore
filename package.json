@@ -14,5 +14,8 @@
         "vite": "^4.0.0",
         "vue": "^3.2.36",
         "vue-router": "^4.2.5"
+    },
+    "dependencies": {
+        "vue3-toastify": "^0.1.13"
     }
 }
