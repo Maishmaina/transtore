@@ -1,5 +1,5 @@
 <template>
-    <Main page-name="Home"></Main>
+    <Main page-name="Dashboard"></Main>
 </template>
 
 <script setup>
