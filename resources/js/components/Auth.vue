@@ -28,17 +28,17 @@ const body = document.body
 const isDarkTheme = body.getAttribute('data-bs-theme') == 'dark'
 
 onMounted(() => {
-    document.body.classList.add('app-blank', 'bgi-size-cover', 'bgi-attachment-fixed', 'bgi-position-center', 'bgi-no-repeat')
+    body.classList.add('app-blank', 'bgi-size-cover', 'bgi-attachment-fixed', 'bgi-position-center', 'bgi-no-repeat')
     if (isDarkTheme) {
-        document.body.style.backgroundImage = "url('/assets/media/auth/bg4-dark.jpg')"
+        body.style.backgroundImage = "url('/assets/media/auth/bg4-dark.jpg')"
     } else {
-        document.body.style.backgroundImage = "url('/assets/media/auth/bg4.jpg')"
+        body.style.backgroundImage = "url('/assets/media/auth/bg4.jpg')"
     }
 })
 
 onUnmounted(() => {
-    document.body.classList.remove('app-blank', 'bgi-size-cover', 'bgi-attachment-fixed', 'bgi-position-center', 'bgi-no-repeat')
-    document.body.style.backgroundImage = "none"
+    body.classList.remove('app-blank', 'bgi-size-cover', 'bgi-attachment-fixed', 'bgi-position-center', 'bgi-no-repeat')
+    body.removeAttribute('style')
 })
 </script>
 
