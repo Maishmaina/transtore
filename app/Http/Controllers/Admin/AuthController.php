@@ -83,7 +83,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'reset_code' => 'required|exists:admins,reset_code',
-            'password' => 'required'
+            'password' => 'required|confirmed'
         ]);
 
         $admin = Admin::where('reset_code', $request->reset_code)->first();
