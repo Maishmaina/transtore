@@ -15,6 +15,10 @@
     
     <div id="app"></div>
 
+    <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
+        <i class="ki-outline ki-arrow-up"></i>
+    </div>
+
     <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
 </body>
