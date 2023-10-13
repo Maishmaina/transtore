@@ -13,5 +13,11 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware('auth:admin_api')->group(function () {
         Route::delete('logout', [AdminAuthController::class, 'logout']);
+
+        // ADMIN ROUTES
+        Route::apiResource('admins', AdminController::class);
+
+        // USER ROUTES
+        Route::apiResource('users', UserController::class);
     });
 });
