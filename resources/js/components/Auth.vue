@@ -28,6 +28,7 @@ const body = document.body
 const isDarkTheme = body.getAttribute('data-bs-theme') == 'dark'
 
 onMounted(() => {
+    body.setAttribute('id', 'kt_body')
     body.classList.add('app-blank', 'bgi-size-cover', 'bgi-attachment-fixed', 'bgi-position-center', 'bgi-no-repeat')
     if (isDarkTheme) {
         body.style.backgroundImage = "url('/assets/media/auth/bg4-dark.jpg')"
@@ -37,8 +38,9 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-    body.classList.remove('app-blank', 'bgi-size-cover', 'bgi-attachment-fixed', 'bgi-position-center', 'bgi-no-repeat')
+    body.removeAttribute('id')
     body.removeAttribute('style')
+    body.classList.remove('app-blank', 'bgi-size-cover', 'bgi-attachment-fixed', 'bgi-position-center', 'bgi-no-repeat')
 })
 </script>
 
