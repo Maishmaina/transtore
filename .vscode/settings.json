@@ -1,0 +1,9 @@
+{
+    "[blade]": {
+        "editor.formatOnSave": false
+    },
+    "[vue]": {
+        "editor.formatOnSave": false
+    },
+    "cSpell.words": ["pinia", "Transtores"]
+}
