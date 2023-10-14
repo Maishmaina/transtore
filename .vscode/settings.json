@@ -5,5 +5,10 @@
     "[vue]": {
         "editor.formatOnSave": false
     },
-    "cSpell.words": ["pinia", "Transtores"]
+    "cSpell.words": [
+        "pinia",
+        "Swal",
+        "sweetalert",
+        "Transtores"
+    ]
 }
