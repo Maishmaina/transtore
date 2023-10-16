@@ -54,12 +54,12 @@
                                                 </a>
                                             </div>
                                             <div class="menu-item">
-                                                <a class="menu-link" href="#">
+                                                <router-link :to="{name: 'users-list'}" class="menu-link">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
                                                     <span class="menu-title">Customers</span>
-                                                </a>
+                                                </router-link>
                                             </div>
                                         </div>
                                     </div>

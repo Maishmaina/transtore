@@ -31,6 +31,19 @@ const router = createRouter({
             },
         },
         {
+            path: "/user-management",
+            children: [
+                {
+                    path: "customers",
+                    name: "users-list",
+                    component: () => import("@/pages/Users.vue"),
+                    meta: {
+                        requiresAuth: true,
+                    },
+                },
+            ],
+        },
+        {
             path: "/auth",
             children: [
                 {
