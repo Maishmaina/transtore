@@ -25,6 +25,7 @@ class UserRequest extends FormRequest
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:users,email',
+            'enabled' => 'nullable|boolean'
         ];
 
         if ($this->method() == 'PATCH') {
