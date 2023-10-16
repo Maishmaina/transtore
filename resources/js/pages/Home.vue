@@ -1,5 +1,5 @@
 <template>
-    <Main page-name="Dashboard"></Main>
+    <div>Hello World!</div>
 </template>
 
 <script setup>

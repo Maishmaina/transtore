@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 
+import Auth from "@/components/Auth.vue";
+import Main from "@/components/Main.vue";
 import Home from "@/pages/Home.vue";
 import Login from "@/pages/Login.vue";
 import ForgotPassword from "@/pages/ForgotPassword.vue";
@@ -24,27 +26,36 @@ const router = createRouter({
     routes: [
         {
             path: "/",
-            name: "home",
-            component: Home,
-            meta: {
-                requiresAuth: true,
-            },
-        },
-        {
-            path: "/user-management",
+            component: Main,
             children: [
                 {
-                    path: "customers",
-                    name: "users-list",
-                    component: () => import("@/pages/Users.vue"),
+                    path: "",
+                    name: "home",
+                    component: Home,
                     meta: {
                         requiresAuth: true,
+                        title: "Dashboard",
                     },
+                },
+                {
+                    path: "/user-management",
+                    children: [
+                        {
+                            path: "customers",
+                            name: "users-list",
+                            component: () => import("@/pages/Users.vue"),
+                            meta: {
+                                requiresAuth: true,
+                                title: "Customers List",
+                            },
+                        },
+                    ],
                 },
             ],
         },
         {
             path: "/auth",
+            component: Auth,
             children: [
                 {
                     path: "login",
