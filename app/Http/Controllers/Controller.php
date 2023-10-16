@@ -31,6 +31,6 @@ class Controller extends BaseController
         return response()->json([
             'message' => $message,
             'error' => $e->getMessage()
-        ]);
+        ], 500);
     }
 }
