@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('verification_code')->nullable()->unique();
             $table->string('reset_code')->nullable()->unique();
             $table->string('password');
+            $table->boolean('enabled')->default(true);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

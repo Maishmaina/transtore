@@ -24,7 +24,8 @@ class UserResource extends JsonResource
             'full_name' => $this->full_name,
             'phone_number' => $this->phone_number,
             'email' => $this->email,
-            'created_at' => $this->when($isAdmin, $this->created_at)
+            'created_at' => $this->when($isAdmin, $this->created_at),
+            'enabled' => $this->when($isAdmin, $this->enabled)
         ];
     }
 }
