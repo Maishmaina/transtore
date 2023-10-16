@@ -58,4 +58,11 @@ onUnmounted(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+@media (min-width: 992px) {
+    .app-content {
+        padding-top: 0 !important;
+    }
+}
+
+</style>
