@@ -76,12 +76,80 @@
                     </div>
 
                     <div class="modal-body">
-                        <p>Modal body text goes here.</p>
+                        <div class="form-group">
+                            <label for="first-name" class="required form-label">First Name</label>
+                            <input type="text" 
+                                class="form-control form-control-solid" 
+                                :class="{'is-invalid': errors.first_name}"
+                                id="first-name" 
+                                placeholder="Enter first name" 
+                                v-model="form.first_name" 
+                                :readonly="processing"
+                            />
+                            <div class="invalid-feedback" v-if="errors.first_name">
+                                <small>{{ errors.first_name[0] }}</small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name" class="required form-label">Last Name</label>
+                            <input type="text" 
+                                class="form-control form-control-solid" 
+                                :class="{'is-invalid': errors.last_name}"
+                                id="last-name" 
+                                placeholder="Enter last name" 
+                                v-model="form.last_name" 
+                                :readonly="processing"
+                            />
+                            <div class="invalid-feedback" v-if="errors.last_name">
+                                <small>{{ errors.last_name[0] }}</small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone-number" class="form-label">Phone No.</label>
+                            <input type="text" 
+                                class="form-control form-control-solid" 
+                                :class="{'is-invalid': errors.phone_number}"
+                                id="phone-number" 
+                                placeholder="Enter phone number" 
+                                v-model="form.phone_number" 
+                                :readonly="processing"
+                            />
+                            <div class="invalid-feedback" v-if="errors.phone_number">
+                                <small>{{ errors.phone_number[0] }}</small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="required form-label">Email</label>
+                            <input type="email" 
+                                class="form-control form-control-solid" 
+                                :class="{'is-invalid': errors.email}"
+                                id="email" 
+                                placeholder="Enter email" 
+                                v-model="form.email" 
+                                :readonly="processing"
+                            />
+                            <div class="invalid-feedback" v-if="errors.email">
+                                <small>{{ errors.email[0] }}</small>
+                            </div>
+                        </div>
+                        <div class="mt-6 form-check form-switch form-check-custom form-check-solid">
+                            <input class="form-check-input h-25px w-40px" type="checkbox" id="enabled" v-model="form.enabled" :readonly="processing"/>
+                            <label class="form-check-label" for="enabled">
+                                Enabled
+                            </label>
+                        </div>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-primary" @click="submitForm">
+                            <span class="indicator-label" v-if="!processing">
+                                Submit
+                            </span>
+                            <span class="indicator-progress d-block" v-else>
+                                Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -152,6 +220,49 @@ onMounted(() => {
 })
 
 // TABLE ACTIONS
+const errors = ref({})
+const processing = ref(false)
+
+const form = ref({
+    first_name: '',
+    last_name: '',
+    phone_number: '',
+    email: '',
+    enabled: true,
+})
+
+const clearForm = () => {
+    form.value.first_name = '',
+    form.value.last_name = '',
+    form.value.phone_number = '',
+    form.value.email = '',
+    form.value.enabled = true
+}
+
+const submitForm = async () => {
+    errors.value = {}
+    processing.value = true
+    
+    let response = null
+    try {
+        response = await axios.post('users', form.value, config)
+    } catch (error) {
+        toast.error("Error adding customer")
+        response = error.response
+        errors.value = response.data.errors
+    }
+    
+    if (response.status == 201) {
+        fetchUsers()
+        $('#add-modal .btn-sm').click()
+        clearForm()
+        toast.success("Customer added successfully")
+    }
+
+    processing.value = false
+
+}
+
 const deleteItem = (id) => {
     Swal.fire({
         title: 'Are you sure?',
