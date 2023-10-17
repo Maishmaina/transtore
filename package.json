@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "laravel-vue-pagination": "^4.1.1",
+        "lodash": "^4.17.21",
         "vue3-toastify": "^0.1.13"
     }
 }
