@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Mail\AccountCreated;
+use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -18,9 +19,18 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return UserResource::collection(User::latest()->paginate());
+        $users = User::search($request->search)
+            ->firstName($request->first_name)
+            ->lastName($request->last_name)
+            ->phoneNumber($request->phone_number)
+            ->email($request->email)
+            ->status($request->status)
+            ->date($request->from_date, $request->to_date)
+            ->latest()->paginate();
+
+        return UserResource::collection($users);
     }
 
     /**
