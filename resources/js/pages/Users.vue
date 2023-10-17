@@ -2,7 +2,7 @@
     <div class="card" v-if="!processing">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
-                <div class="d-flex align-items-center position-relative my-1">
+                <div class="d-flex align-items-center position-relative my-1" v-if="dataAvailable && !filter">
                     <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
                     <input type="text" class="form-control form-control-solid w-250px ps-12" placeholder="Search" v-model="search"/>
                 </div>
@@ -13,7 +13,7 @@
                         <i class="ki-outline ki-filter fs-2"></i>
                         Clear Filters
                     </button>
-                    <button type="button" class="btn btn-light-primary me-3" data-bs-toggle="modal" data-bs-target="#filter-modal">
+                    <button type="button" class="btn btn-light-primary me-3" data-bs-toggle="modal" data-bs-target="#filter-modal" v-if="dataAvailable && !filter">
                         <i class="ki-outline ki-filter-search fs-2"></i>
                         Filter
                     </button>
