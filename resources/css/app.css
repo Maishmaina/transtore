@@ -2,3 +2,9 @@
 .form-group {
     margin-bottom: 1rem;
 }
+
+/* TABLES */
+.table.table-striped th:first-child,
+.table.table-striped td:first-child {
+    padding-left: 0.75rem;
+}
