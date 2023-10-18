@@ -49,6 +49,15 @@ const router = createRouter({
                                 title: "Customers List",
                             },
                         },
+                        {
+                            path: "operators",
+                            name: "admins-list",
+                            component: () => import("@/pages/Admins.vue"),
+                            meta: {
+                                requiresAuth: true,
+                                title: "Operators List",
+                            },
+                        },
                     ],
                 },
             ],

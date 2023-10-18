@@ -46,12 +46,12 @@
 
                                         <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-active-bg px-lg-2 py-lg-4 w-lg-225px">
                                             <div class="menu-item">
-                                                <a class="menu-link" href="#">
+                                                <router-link :to="{name: 'admins-list'}" class="menu-link">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
-                                                    <span class="menu-title">System Users</span>
-                                                </a>
+                                                    <span class="menu-title">Operators</span>
+                                                </router-link>
                                             </div>
                                             <div class="menu-item">
                                                 <router-link :to="{name: 'users-list'}" class="menu-link">
