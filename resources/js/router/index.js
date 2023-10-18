@@ -47,6 +47,7 @@ const router = createRouter({
                             meta: {
                                 requiresAuth: true,
                                 title: "Customers List",
+                                permission: "view customers",
                             },
                         },
                         {
@@ -56,6 +57,7 @@ const router = createRouter({
                             meta: {
                                 requiresAuth: true,
                                 title: "Operators List",
+                                permission: "view operators",
                             },
                         },
                     ],
@@ -95,11 +97,17 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
-    const { authUser } = useAuthStore();
+    const { authUser, permissions } = useAuthStore();
 
     if (to.meta.requiresAuth && !authUser) {
         return {
             name: "login",
+        };
+    }
+
+    if (to.meta.permission && !permissions.includes(to.meta.permission)) {
+        return {
+            name: "home",
         };
     }
 });
