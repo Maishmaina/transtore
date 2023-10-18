@@ -31,11 +31,10 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $token = $admin->createToken('Admin Token')->plainTextToken;
-
         return response()->json([
             'admin' => new AdminResource($admin),
-            'token' => $token
+            'token' => $admin->createToken('Admin Token')->plainTextToken,
+            'permissions' => $admin->getAllPermissions()->pluck('name')
         ]);
     }
 
