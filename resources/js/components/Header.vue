@@ -46,7 +46,7 @@
 
                                         <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-active-bg px-lg-2 py-lg-4 w-lg-225px">
                                             <div class="menu-item">
-                                                <router-link :to="{name: 'admins-list'}" class="menu-link">
+                                                <router-link :to="{name: 'admins-list'}" class="menu-link" v-if="permissions.includes('view operators')">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
@@ -54,7 +54,7 @@
                                                 </router-link>
                                             </div>
                                             <div class="menu-item">
-                                                <router-link :to="{name: 'users-list'}" class="menu-link">
+                                                <router-link :to="{name: 'users-list'}" class="menu-link" v-if="permissions.includes('view customers')">
                                                     <span class="menu-bullet">
                                                         <span class="bullet bullet-dot"></span>
                                                     </span>
@@ -241,7 +241,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { toast } from "vue3-toastify";
 
 const router = useRouter()
-const { authUser, logout } = useAuthStore()
+const { authUser, permissions, logout } = useAuthStore()
 
 const signOut = async () => {
     let response = await logout()
