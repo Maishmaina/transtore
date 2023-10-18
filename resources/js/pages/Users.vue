@@ -35,7 +35,7 @@
                         <a href="#" type="button" class="btn btn-sm btn-icon btn-primary">
                             <i class="fa-solid fa-eye"></i>
                         </a>
-                        <button type="button" class="ms-2 btn btn-sm btn-icon btn-danger" @click="deleteItem(user.id)">
+                        <button type="button" class="ms-2 btn btn-sm btn-icon btn-danger" @click="deleteUser(user.id)">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </td>
@@ -365,7 +365,7 @@ watch(() => search.value, throttle(() => {
     fetchUsers()
 }, 600))
 
-const deleteItem = (id) => {
+const deleteUser = (id) => {
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -384,7 +384,7 @@ const deleteItem = (id) => {
                 toast.error("Error deleting customer")
             }
 
-            if (response.status = 200) {
+            if (response.status == 200) {
                 Swal.fire(
                     'Deleted!',
                     'Customer has been deleted.',
@@ -393,7 +393,6 @@ const deleteItem = (id) => {
                 processing.value = true
 
                 fetchUsers()
-
             }
         }
     })
