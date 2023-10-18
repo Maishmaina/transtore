@@ -6,6 +6,7 @@ export const useAuthStore = defineStore(
     () => {
         const authUser = ref(null);
         const token = ref(null);
+        const permissions = ref([]);
 
         const login = async (data) => {
             let response = null;
@@ -18,6 +19,7 @@ export const useAuthStore = defineStore(
             if (response.status == 200) {
                 authUser.value = response.data.admin;
                 token.value = response.data.token;
+                permissions.value = response.data.permissions;
             }
 
             return response;
@@ -43,7 +45,7 @@ export const useAuthStore = defineStore(
             return response;
         };
 
-        return { authUser, token, login, logout };
+        return { authUser, token, permissions, login, logout };
     },
     {
         persist: true,
