@@ -28,7 +28,8 @@ class UserController extends Controller
             ->email($request->email)
             ->status($request->status)
             ->date($request->from_date, $request->to_date)
-            ->latest()->paginate();
+            ->latest()
+            ->paginate();
 
         return UserResource::collection($users);
     }
