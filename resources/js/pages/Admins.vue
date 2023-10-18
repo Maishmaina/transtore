@@ -267,7 +267,7 @@ const submitForm = async () => {
         fetchAdmins()
     } else if (response.status == 422) {
         toast.error("Error adding operator")
-        errors.value = response.data.errorsPA
+        errors.value = response.data.errors
 
         processing.value = false
     }
