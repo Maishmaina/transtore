@@ -39,6 +39,7 @@ class AdminController extends Controller
                 'phone_number' => $request->phone_number,
                 'email' => $request->email,
                 'password' => Hash::make($password),
+                'enabled' => $request->enabled
             ]);
         } catch (Exception $e) {
             return $this->respondWithError('Failed to create admin', $e);
@@ -74,6 +75,7 @@ class AdminController extends Controller
                 'last_name' => $request->last_name,
                 'phone_number' => $request->phone_number,
                 'email' => $request->email,
+                'enabled' => $request->enabled
             ]);
         } catch (Exception $e) {
             return $this->respondWithError('Failed to update admin', $e);

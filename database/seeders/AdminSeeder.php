@@ -18,7 +18,8 @@ class AdminSeeder extends Seeder
             'last_name' => 'Admin',
             'email' => 'admin@transtores.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('password')
+            'password' => Hash::make('password'),
+            'enabled' => true
         ]);
     }
 }

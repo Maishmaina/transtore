@@ -25,6 +25,7 @@ class AdminRequest extends FormRequest
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email|unique:admins,email',
+            'enabled' => 'nullable|boolean'
         ];
 
         if ($this->method() == 'PATCH') {
