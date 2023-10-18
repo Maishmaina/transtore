@@ -2,21 +2,25 @@
     <div class="card" v-if="!processing">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
-                <div class="d-flex align-items-center position-relative my-1" v-if="fetchedData.data?.length || search">
-                    <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
-                    <input type="search" class="form-control form-control-solid w-250px ps-12" placeholder="Search" v-model="search" />
-                </div>
+                <template v-if="filterable">
+                    <div class="d-flex align-items-center position-relative my-1" v-if="fetchedData.data?.length || search">
+                        <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
+                        <input type="search" class="form-control form-control-solid w-250px ps-12" placeholder="Search" v-model="search" />
+                    </div>
+                </template>
             </div>
             <div class="card-toolbar">
                 <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-light-danger me-3" @click="$emit('clearFilters')" v-if="filter">
-                        <i class="ki-outline ki-filter fs-2"></i>
-                        Clear Filters
-                    </button>
-                    <button type="button" class="btn btn-light-primary me-3" @click="$emit('filterClicked')" v-if="fetchedData.data?.length || filter">
-                        <i class="ki-outline ki-filter-search fs-2"></i>
-                        Filter
-                    </button>
+                    <template v-if="filterable">
+                        <button type="button" class="btn btn-light-danger me-3" @click="$emit('clearFilters')" v-if="filter">
+                            <i class="ki-outline ki-filter fs-2"></i>
+                            Clear Filters
+                        </button>
+                        <button type="button" class="btn btn-light-primary me-3" @click="$emit('filterClicked')" v-if="fetchedData.data?.length || filter">
+                            <i class="ki-outline ki-filter-search fs-2"></i>
+                            Filter
+                        </button>
+                    </template>
                     <button type="button" class="btn btn-primary" @click="$emit('addClicked')">Add {{ resource }}</button>
                 </div>
             </div>
@@ -34,7 +38,7 @@
                     </tbody>
                 </table>
                 <div class="mt-3 d-flex justify-content-between align-items-center" v-if="fetchedData.data?.length && !filter">
-                    <div>{{ `Showing ${fetchedData.meta.from ?? 0} to ${fetchedData.meta.to ?? 0} of ${fetchedData.meta.total} entries` }}</div>
+                    <div>{{ `Showing ${fetchedData.meta?.from ?? fetchedData.from ?? 0} to ${fetchedData.meta?.to ?? fetchedData.to ?? 0} of ${fetchedData.meta?.total ?? fetchedData.total} entries` }}</div>
                     <nav>
                         <slot name="pagination" />
                     </nav>
@@ -55,6 +59,7 @@ defineProps({
     filter: Boolean,
     fetchedData: Object,
     resource: String,
+    filterable: Boolean
 })
 
 const emit = defineEmits([
