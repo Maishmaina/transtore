@@ -374,10 +374,9 @@ const deleteAdmin = (id) => {
                 response = await axios.delete(`admins/${id}`, config)
             } catch (error) {
                 response = error.response
-                toast.error("Error deleting operator")
             }
 
-            if (response.status = 200) {
+            if (response.status == 200) {
                 Swal.fire(
                     'Deleted!',
                     'Operator has been deleted.',
@@ -386,7 +385,10 @@ const deleteAdmin = (id) => {
                 processing.value = true
 
                 fetchAdmins()
-
+            } else if (response.status == 403) {
+                toast.error(response.data.message)
+            } else {
+                toast.error("Error deleting operator")
             }
         }
     })
