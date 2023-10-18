@@ -225,10 +225,6 @@ const search = ref('')
 const searching = (value) => {
     search.value = value
     fetchAdmins()
-    
-    if (value && !filter.value) {
-        filter.value = true
-    }
 }
 
 const showAddModal = () => {
