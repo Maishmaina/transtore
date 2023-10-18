@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Admin;
 use Illuminate\Support\Str;
 use App\Mail\AccountCreated;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\AdminRequest;
 use App\Http\Controllers\Controller;
@@ -18,9 +19,21 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return AdminResource::collection(Admin::paginate());
+
+        $admins = Admin::query()
+            ->search($request->search)
+            ->firstName($request->first_name)
+            ->lastName($request->last_name)
+            ->phoneNumber($request->phone_number)
+            ->email($request->email)
+            ->status($request->status)
+            ->date($request->from_date, $request->to_date)
+            ->latest()
+            ->paginate();
+
+        return AdminResource::collection($admins);
     }
 
     /**
