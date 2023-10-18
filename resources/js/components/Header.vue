@@ -17,14 +17,8 @@
                 <div class="d-flex align-items-stretch" id="kt_app_header_menu_wrapper">
                     <div class="app-header-menu app-header-mobile-drawer align-items-stretch" data-kt-drawer="true" data-kt-drawer-name="app-header-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_header_menu_toggle" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_app_body', lg: '#kt_app_header_menu_wrapper'}">
                         <div class="menu menu-rounded menu-column menu-lg-row menu-active-bg menu-title-gray-600 menu-state-primary menu-arrow-gray-400 fw-semibold fw-semibold fs-6 align-items-stretch my-5 my-lg-0 px-2 px-lg-0" id="#kt_app_header_menu" data-kt-menu="true">
-                            <div class="menu-item me-0 me-lg-2">
-                                <router-link :to="{name: 'home'}" class="menu-link">
-                                    <span class="menu-icon">
-                                        <i class="ki-outline ki-abstract-28 fs-3"></i>
-                                    </span>
-                                    <span class="menu-title">Dashboard</span>
-                                </router-link>
-                            </div>
+                            <NavLink title="Dashboard" :route="{name: 'home'}" icon-class="ki-outline ki-abstract-28 fs-3" />
+
                             <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" data-kt-menu-offset="12,0" class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
                                 <span class="menu-link">
                                     <span class="menu-icon">
@@ -34,36 +28,17 @@
                                     <span class="menu-arrow"></span>
                                 </span>
 
-                                <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-250px">
-                                    <div data-kt-menu-trigger="{default:'click', lg: 'hover'}" data-kt-menu-placement="right-start" class="menu-item menu-lg-down-accordion">
-                                        <span class="menu-link">
-                                            <span class="menu-icon">
-                                                <i class="ki-outline ki-people fs-2"></i>
-                                            </span>
-                                            <span class="menu-title">User Management</span>
-                                            <span class="menu-arrow"></span>
-                                        </span>
+                            <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-250px">
+                                <NavSubMenu title="User Management" icon-class="ki-outline ki-people fs-2" >
+                                    <NavLink title="Operators" :route="{name: 'admins-list'}" v-if="permissions.includes('view operators')"/>
+                                    <NavLink title="Customers" :route="{name: 'users-list'}" v-if="permissions.includes('view customers')"/>
+                                </NavSubMenu>
+    
+                                <NavSubMenu title="Globals" icon-class="ki-outline ki-setting-2 fs-2" >
+                                    <NavLink title="Roles & Permissions" :route="{name: 'roles-and-permissions'}" v-if="permissions.includes('view roles')"/>
+                                </NavSubMenu>
+                            </div>
 
-                                        <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-active-bg px-lg-2 py-lg-4 w-lg-225px">
-                                            <div class="menu-item">
-                                                <router-link :to="{name: 'admins-list'}" class="menu-link" v-if="permissions.includes('view operators')">
-                                                    <span class="menu-bullet">
-                                                        <span class="bullet bullet-dot"></span>
-                                                    </span>
-                                                    <span class="menu-title">Operators</span>
-                                                </router-link>
-                                            </div>
-                                            <div class="menu-item">
-                                                <router-link :to="{name: 'users-list'}" class="menu-link" v-if="permissions.includes('view customers')">
-                                                    <span class="menu-bullet">
-                                                        <span class="bullet bullet-dot"></span>
-                                                    </span>
-                                                    <span class="menu-title">Customers</span>
-                                                </router-link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -239,6 +214,8 @@
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 import { toast } from "vue3-toastify";
+import NavLink from'@/components/NavLink.vue'
+import NavSubMenu from'@/components/NavSubMenu.vue'
 
 const router = useRouter()
 const { authUser, permissions, logout } = useAuthStore()

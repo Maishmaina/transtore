@@ -62,6 +62,22 @@ const router = createRouter({
                         },
                     ],
                 },
+                {
+                    path: "/globals",
+                    children: [
+                        {
+                            path: "roles-and-permissions",
+                            name: "roles-and-permissions",
+                            component: () =>
+                                import("@/pages/RolesAndPermissions.vue"),
+                            meta: {
+                                requiresAuth: true,
+                                title: "Roles and Permissions",
+                                permission: "view roles",
+                            },
+                        },
+                    ],
+                },
             ],
         },
         {
