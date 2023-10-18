@@ -103,8 +103,14 @@ class AdminController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Admin $admin)
+    public function destroy(Request $request, Admin $admin)
     {
+        if ($request->user()->cannot('destroy', $admin)) {
+            return response()->json([
+                'message' => 'You cannot delete yourself!'
+            ], 403);
+        }
+
         return $this->destroyModel($admin);
     }
 }
