@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
@@ -19,5 +20,8 @@ Route::prefix('admin')->group(function () {
 
         // USER ROUTES
         Route::apiResource('users', UserController::class);
+
+        // ROLE ROUTES
+        Route::apiResource('roles', RoleController::class);
     });
 });
