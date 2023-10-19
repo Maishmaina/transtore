@@ -10,10 +10,10 @@
         @filter-clicked="showFilterModal"
     >
         <template #thead>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th>Name</th>
             <th>Phone No.</th>
             <th>Email</th>
+            <th>Role</th>
             <th>Date Added</th>
             <th>Status</th>
             <th class="text-end">Actions</th>
@@ -22,10 +22,10 @@
         <template #tbody>
             <template v-if="admins.data.length">
                 <tr v-for="admin in admins.data" :key="admin.id">
-                    <td>{{ admin.first_name }}</td>
-                    <td>{{ admin.last_name }}</td>
+                    <td>{{ admin.full_name }}</td>
                     <td>{{ admin.phone_number }}</td>
                     <td>{{ admin.email }}</td>
+                    <td>{{ admin.roles[0].name }}</td>
                     <td>{{ moment(admin.created_at).format('MMMM Do YYYY') }}</td>
                     <td>
                         <span class="badge badge-light-success" v-if="admin.enabled">Enabled</span>
@@ -108,6 +108,13 @@
                 <div class="invalid-feedback" v-if="errors.email">
                     <small>{{ errors.email[0] }}</small>
                 </div>
+            </div>
+            <div class="form-group">
+                <label for="role" class="required form-label">Role</label>
+                <select class="form-select form-select-solid" id="role" v-model="form.role" :readonly="processing">
+                    <option value="">Select role...</option>
+                    <option :value="role.id" v-for="role in roles" :key="role.id">{{ role.name }}</option>
+                </select>
             </div>
             <div class="mt-6 form-check form-switch form-check-custom form-check-solid">
                 <input class="form-check-input h-25px w-40px" type="checkbox" id="enabled" v-model="form.enabled" :readonly="processing"/>
@@ -238,6 +245,7 @@ const form = ref({
     last_name: '',
     phone_number: '',
     email: '',
+    role: '',
     enabled: true,
 })
 
@@ -246,6 +254,7 @@ const clearForm = () => {
     form.value.last_name = '',
     form.value.phone_number = '',
     form.value.email = '',
+    form.value.role = '',
     form.value.enabled = true
 }
 
@@ -318,8 +327,25 @@ const fetchAdmins = async (page = 1) => {
 
 }
 
-onMounted(() => {
+const roles = ref([])
+
+onMounted(async () => {
     fetchAdmins()
+
+    axios.get('roles', {
+        ...config,
+
+        params: {
+            paginate: false
+        }
+    })
+        .then(response => {
+            roles.value = response.data
+        })
+        .catch(() => {
+            toast.error('Error fetching roles')
+        })
+    
 })
 
 const showFilterModal = () => {
