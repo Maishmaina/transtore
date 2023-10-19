@@ -16,7 +16,7 @@ class RoleController extends Controller
     {
         $paginate = $request->query('paginate', 'true');
 
-        $roles = Role::withCount('permissions', 'users');
+        $roles = Role::with('permissions')->withCount('permissions', 'users');
 
         if ($paginate == 'true') {
             $roles = $roles->paginate();
@@ -93,5 +93,20 @@ class RoleController extends Controller
             ], 403);
         }
         return $this->destroyModel($role);
+    }
+
+    public function syncPermissions(Request $request)
+    {
+        $role = Role::find($request->role_id);
+
+        try {
+            $role->syncPermissions($request->permissions);
+        } catch (Exception $e) {
+            return $this->respondWithError('Failed to sync permissions', $e);
+        }
+
+        return response()->json([
+            'message' => 'Permissions synced successfully'
+        ]);
     }
 }

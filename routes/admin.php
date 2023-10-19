@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
@@ -23,5 +24,11 @@ Route::prefix('admin')->group(function () {
 
         // ROLE ROUTES
         Route::apiResource('roles', RoleController::class);
+        Route::post('sync-permissions', [RoleController::class, 'syncPermissions']);
+
+        // PERMISSIONS
+        Route::get('permissions', function () {
+            return response()->json(Permission::get()->pluck('name'));
+        });
     });
 });
