@@ -24,7 +24,8 @@ class AdminResource extends JsonResource
             'phone_number' => $this->phone_number,
             'email' => $this->email,
             'created_at' => $this->created_at,
-            'enabled' => $this->enabled
+            'enabled' => $this->enabled,
+            'roles' => $this->whenLoaded('roles')
         ];
     }
 }
