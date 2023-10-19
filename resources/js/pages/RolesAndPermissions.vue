@@ -23,10 +23,10 @@
                     <td>{{ moment(role.created_at).format('MMMM Do YYYY') }}</td>
                     <td class="text-end">
                         <template v-if="role.id !== 1">
-                            <a href="#" type="button" class="btn btn-sm btn-primary">
+                            <button type="button" class="btn btn-sm btn-primary" @click="showPermissionsModal(role)">
                                 <i class="fa-solid fa-rotate"></i>
                                 Sync Permissions
-                            </a>
+                            </button>
                             <button type="button" class="ms-2 btn btn-sm btn-icon btn-danger" @click="deleteRole(role.id)">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
@@ -63,6 +63,32 @@
             <button type="button" class="btn btn-primary" @click="submitForm">
                 <span class="indicator-label" v-if="!processing">
                     Submit
+                </span>
+                <span class="indicator-progress d-block" v-else>
+                    Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                </span>
+            </button>
+        </template>
+    </Modal>
+
+    <Modal id="permissions-modal" :title="currentRole.name + ' Permissions'" size="large">
+        <template #modal-body>
+            <div class="row">
+                <div class="my-3 col-md-3" v-for="permission in allPermissions" :key="permission">
+                    <div class="form-check form-check-custom form-check-solid">
+                        <input class="form-check-input" type="checkbox" :value="permission" :id="permission" v-model="permissions"/>
+                        <label class="form-check-label" :for="permission">
+                            {{ permission.toUpperCase() }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template #modal-footer>
+            <button type="button" class="btn btn-primary" @click="syncPermissions">
+                <span class="indicator-label" v-if="!processing">
+                    Sync Permissions
                 </span>
                 <span class="indicator-progress d-block" v-else>
                     Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
@@ -109,8 +135,18 @@ const fetchRoles = async (page = 1) => {
     }
 }
 
+const allPermissions = ref([])
+
 onMounted(() => {
     fetchRoles()
+
+    axios.get('permissions', config)
+        .then(response => {
+            allPermissions.value = response.data
+        })
+        .catch(() => {
+            toast.error('Error fetching permissions')
+        })
 })
 
 const showAddModal = () => {
@@ -145,6 +181,47 @@ const submitForm = async () => {
 
         processing.value = false
     }
+}
+
+const permissions = ref([])
+
+const currentRole = ref({})
+
+const showPermissionsModal = (role) => {
+    role.permissions.forEach(permission => {
+        if (allPermissions.value.includes(permission.name)) {
+            permissions.value.push(permission.name)
+        }
+    })
+
+    currentRole.value = role
+    
+    $('#permissions-modal').modal('show')
+}
+
+const syncPermissions = () => {
+    let data = {
+        role_id: currentRole.value.id,
+        permissions: permissions.value
+    }
+
+    processing.value = true
+
+    axios.post('sync-permissions', data, config)
+        .then(() => {
+            toast.success('Permissions synced successfully')
+            
+            fetchRoles()
+            
+            $('#permissions-modal .btn-sm').click()
+            permissions.value = []
+            currentRole.value = {}
+
+        })
+        .catch(() => {
+            toast.error('Error syncing permissions')
+            processing.value =false
+        })
 }
 
 const deleteRole = (id) => {
