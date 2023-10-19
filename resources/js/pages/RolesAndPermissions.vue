@@ -9,6 +9,7 @@
         <template #thead>
             <th>Name</th>
             <th>Permissions</th>
+            <th>Operators</th>
             <th>Date Created</th>
             <th class="text-end">Actions</th>
         </template>
@@ -18,15 +19,18 @@
                 <tr v-for="role in roles.data" :key="role.id">
                     <td>{{ role.name }}</td>
                     <td>{{ role.permissions_count }}</td>
+                    <td>{{ role.users_count }}</td>
                     <td>{{ moment(role.created_at).format('MMMM Do YYYY') }}</td>
                     <td class="text-end">
-                        <a href="#" type="button" class="btn btn-sm btn-primary">
-                            <i class="fa-solid fa-rotate"></i>
-                            Sync Permissions
-                        </a>
-                        <button type="button" class="ms-2 btn btn-sm btn-icon btn-danger" @click="deleteRole(role.id)">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                        <template v-if="role.id !== 1">
+                            <a href="#" type="button" class="btn btn-sm btn-primary">
+                                <i class="fa-solid fa-rotate"></i>
+                                Sync Permissions
+                            </a>
+                            <button type="button" class="ms-2 btn btn-sm btn-icon btn-danger" @click="deleteRole(role.id)">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </template>
                     </td>
                 </tr>
             </template>
