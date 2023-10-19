@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Admin;
 use Exception;
 use App\Models\Admin;
 use Illuminate\Support\Str;
-use App\Mail\AccountCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 use App\Http\Requests\AdminRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use App\Http\Resources\AdminResource;
+use App\Jobs\SendAccountCreatedEmail;
 
 class AdminController extends Controller
 {
@@ -22,7 +22,7 @@ class AdminController extends Controller
     public function index(Request $request)
     {
 
-        $admins = Admin::query()
+        $admins = Admin::with('roles')
             ->search($request->search)
             ->firstName($request->first_name)
             ->lastName($request->last_name)
@@ -41,11 +41,13 @@ class AdminController extends Controller
      */
     public function store(AdminRequest $request)
     {
+        $role = Role::find($request->role);
+
+        $password = Str::random(8);
+
         DB::beginTransaction();
 
         try {
-            $password = Str::random(8);
-
             $admin = Admin::create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -54,14 +56,12 @@ class AdminController extends Controller
                 'password' => Hash::make($password),
                 'enabled' => $request->enabled
             ]);
+
+            $admin->assignRole($role->name);
+
+            SendAccountCreatedEmail::dispatch($admin, $password);
         } catch (Exception $e) {
             return $this->respondWithError('Failed to create admin', $e);
-        }
-
-        try {
-            Mail::to($admin->email)->send(new AccountCreated($admin, $password));
-        } catch (Exception $e) {
-            return $this->respondWithError('Failed to send email', $e);
         }
 
         DB::commit();
@@ -82,6 +82,8 @@ class AdminController extends Controller
      */
     public function update(AdminRequest $request, Admin $admin)
     {
+        $role = Role::find($request->role);
+
         try {
             $admin->update([
                 'first_name' => $request->first_name,
@@ -90,6 +92,8 @@ class AdminController extends Controller
                 'email' => $request->email,
                 'enabled' => $request->enabled
             ]);
+
+            $admin->syncRoles([$role->name]);
         } catch (Exception $e) {
             return $this->respondWithError('Failed to update admin', $e);
         }
