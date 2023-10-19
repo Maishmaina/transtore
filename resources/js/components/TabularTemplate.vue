@@ -59,7 +59,10 @@ defineProps({
     filter: Boolean,
     fetchedData: Object,
     resource: String,
-    filterable: Boolean
+    filterable: {
+        type: Boolean,
+        default: true
+    }
 })
 
 const emit = defineEmits([
