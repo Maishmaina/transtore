@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Admin;
 use Exception;
 use App\Models\User;
 use Illuminate\Support\Str;
-use App\Mail\AccountCreated;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Jobs\SendAccountCreatedEmail;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -39,11 +38,11 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+        $password = Str::random(8);
+
         DB::beginTransaction();
 
         try {
-            $password = Str::random(8);
-
             $user = User::create([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
@@ -52,16 +51,10 @@ class UserController extends Controller
                 'password' => Hash::make($password),
                 'enabled' => $request->enabled
             ]);
+
+            SendAccountCreatedEmail::dispatch($user, $password);
         } catch (Exception $e) {
             return $this->respondWithError('Failed to create user', $e);
-        }
-
-        try {
-            Mail::to($user->email)->send(new AccountCreated($user, $password));
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            return $this->respondWithError('Failed to send email', $e);
         }
 
         DB::commit();
