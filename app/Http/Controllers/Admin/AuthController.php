@@ -23,7 +23,13 @@ class AuthController extends Controller
             'email.exists' => "No admin with the provided email"
         ]);
 
-        $admin = Admin::where('email', $request->email)->first();
+        $admin = Admin::where('email', $request->email)->where('enabled', true)->first();
+
+        if (!$admin) {
+            return response()->json([
+                'message' => 'Unable to login'
+            ], 422);
+        }
 
         if (!Hash::check($request->password, $admin->password)) {
             return response()->json([
