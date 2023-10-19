@@ -16,7 +16,7 @@ class RoleController extends Controller
     {
         $paginate = $request->query('paginate', 'true');
 
-        $roles = Role::withCount('permissions');
+        $roles = Role::withCount('permissions', 'users');
 
         if ($paginate == 'true') {
             $roles = $roles->paginate();
