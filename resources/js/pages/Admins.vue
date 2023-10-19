@@ -35,7 +35,12 @@
                         <a href="#" type="button" class="btn btn-sm btn-icon btn-primary">
                             <i class="fa-solid fa-eye"></i>
                         </a>
-                        <button type="button" class="ms-2 btn btn-sm btn-icon btn-danger" @click="deleteAdmin(admin.id)">
+                        <button 
+                            type="button" 
+                            class="ms-2 btn btn-sm btn-icon btn-danger" 
+                            @click="deleteAdmin(admin.id)"
+                            v-if="admin.id !== authUser.id"
+                        >
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </td>
@@ -217,7 +222,7 @@ import { Bootstrap5Pagination as Pagination } from 'laravel-vue-pagination';
 import { toast } from 'vue3-toastify'
 import Modal from '@/components/Modal.vue'
 
-const { token } = useAuthStore()
+const { authUser, token } = useAuthStore()
 
 const config = {
     headers: {
