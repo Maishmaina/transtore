@@ -12,9 +12,19 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Role::withCount('permissions')->paginate());
+        $paginate = $request->query('paginate', 'true');
+
+        $roles = Role::withCount('permissions');
+
+        if ($paginate == 'true') {
+            $roles = $roles->paginate();
+        } else {
+            $roles = $roles->get();
+        }
+
+        return response()->json($roles);
     }
 
     /**
