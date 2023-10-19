@@ -1,5 +1,5 @@
 <template>
-    <div class="modal fade" tabindex="-1">
+    <div class="modal fade" :class="{'modal-lg': size == 'large'}" tabindex="-1">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -24,7 +24,11 @@
 
 <script setup>
 defineProps({
-    title: String
+    title: String,
+    size: {
+        type: String,
+        default: 'default'
+    }
 })
 </script>
 
