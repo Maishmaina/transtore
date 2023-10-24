@@ -18,7 +18,7 @@
             <template v-if="roles.data.length">
                 <tr v-for="role in roles.data" :key="role.id">
                     <td>{{ role.name }}</td>
-                    <td>{{ role.permissions_count }}</td>
+                    <td>{{ `${role.permissions_count} of ${allPermissions.length}` }}</td>
                     <td>{{ role.users_count }}</td>
                     <td>{{ moment(role.created_at).format('MMMM Do YYYY') }}</td>
                     <td class="text-end">
