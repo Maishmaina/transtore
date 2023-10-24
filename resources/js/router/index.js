@@ -1,12 +1,21 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 
+// PARENT COMPONENTS
 import Auth from "@/components/Auth.vue";
 import Main from "@/components/Main.vue";
+
+// DASHBOARD PAGE COMPONENTS
 import Home from "@/pages/Home.vue";
+import Users from "@/pages/Users.vue";
+import Admins from "@/pages/Admins.vue";
+import RolesAndPermissions from "@/pages/RolesAndPermissions.vue";
+
+// AUTH PAGE COMPONENTS
 import Login from "@/pages/Login.vue";
 import ForgotPassword from "@/pages/ForgotPassword.vue";
 import ResetPassword from "@/pages/ResetPassword.vue";
+
 import NotFound from "@/pages/NotFound.vue";
 
 const checkGuest = (to, from) => {
@@ -43,7 +52,7 @@ const router = createRouter({
                         {
                             path: "customers",
                             name: "users-list",
-                            component: () => import("@/pages/Users.vue"),
+                            component: Users,
                             meta: {
                                 requiresAuth: true,
                                 title: "Customers List",
@@ -53,7 +62,7 @@ const router = createRouter({
                         {
                             path: "operators",
                             name: "admins-list",
-                            component: () => import("@/pages/Admins.vue"),
+                            component: Admins,
                             meta: {
                                 requiresAuth: true,
                                 title: "Operators List",
@@ -68,8 +77,7 @@ const router = createRouter({
                         {
                             path: "roles-and-permissions",
                             name: "roles-and-permissions",
-                            component: () =>
-                                import("@/pages/RolesAndPermissions.vue"),
+                            component: RolesAndPermissions,
                             meta: {
                                 requiresAuth: true,
                                 title: "Roles and Permissions",
