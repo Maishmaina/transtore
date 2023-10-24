@@ -26,7 +26,7 @@ class PermissionSeeder extends Seeder
 
             'view roles',
             'create roles',
-            'update roles',
+            'edit roles',
             'delete roles',
         ];
 
