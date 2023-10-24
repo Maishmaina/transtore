@@ -24,7 +24,13 @@ class AuthController extends Controller
             'email.exists' => "No user with the provided email"
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->where('enabled', true)->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unable to login'
+            ], 422);
+        }
 
         if (!Hash::check($request->password, $user->password)) {
             return response()->json([
