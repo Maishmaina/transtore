@@ -4,6 +4,7 @@
         :fetched-data="admins" 
         :processing="processing" 
         :filter="filter"
+        add-permission="create operators"
         @add-clicked="showAddModal"
         @searching="searching"
         @clear-filters="clearFilters"
@@ -16,7 +17,7 @@
             <th>Role</th>
             <th>Date Added</th>
             <th>Status</th>
-            <th class="text-end">Actions</th>
+            <th class="text-end" v-if="permissions.includes('view operator details') || permissions.includes('delete operators')">Actions</th>
         </template>
         
         <template #tbody>
@@ -31,15 +32,15 @@
                         <span class="badge badge-light-success" v-if="admin.enabled">Enabled</span>
                         <span class="badge badge-light-danger" v-else>Disabled</span>
                     </td>
-                    <td class="text-end">
-                        <a href="#" type="button" class="btn btn-sm btn-icon btn-primary">
+                    <td class="text-end" v-if="permissions.includes('view operator details') || permissions.includes('delete operators')">
+                        <a href="#" type="button" class="btn btn-sm btn-icon btn-primary" v-if="permissions.includes('view operator details')">
                             <i class="fa-solid fa-eye"></i>
                         </a>
                         <button 
                             type="button" 
                             class="ms-2 btn btn-sm btn-icon btn-danger" 
                             @click="deleteAdmin(admin.id)"
-                            v-if="admin.id !== authUser.id"
+                            v-if="admin.id !== authUser.id && permissions.includes('delete operators')"
                         >
                             <i class="fa-solid fa-trash"></i>
                         </button>
@@ -222,7 +223,7 @@ import { Bootstrap5Pagination as Pagination } from 'laravel-vue-pagination';
 import { toast } from 'vue3-toastify'
 import Modal from '@/components/Modal.vue'
 
-const { authUser, token } = useAuthStore()
+const { authUser, token, permissions } = useAuthStore()
 
 const config = {
     headers: {
