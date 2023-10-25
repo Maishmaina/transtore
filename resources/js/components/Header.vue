@@ -33,6 +33,8 @@
                                     <NavLink title="Operators" :route="{name: 'admins-list'}" v-if="permissions.includes('view operators')"/>
                                     <NavLink title="Customers" :route="{name: 'users-list'}" v-if="permissions.includes('view customers')"/>
                                 </NavSubMenu>
+
+                                <NavLink title="Facilities" :route="{name: 'facilities-list'}" icon-class="ki-outline ki-element-6 fs-2" v-if="permissions.includes('view facilities')" />
     
                                 <NavSubMenu title="Globals" icon-class="ki-outline ki-setting-2 fs-2" >
                                     <NavLink title="Roles & Permissions" :route="{name: 'roles-and-permissions'}" v-if="permissions.includes('view roles')"/>

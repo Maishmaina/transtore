@@ -9,6 +9,7 @@ import Main from "@/components/Main.vue";
 import Home from "@/pages/Home.vue";
 import Users from "@/pages/Users.vue";
 import Admins from "@/pages/Admins.vue";
+import Facilities from "@/pages/Facilities.vue";
 import RolesAndPermissions from "@/pages/RolesAndPermissions.vue";
 
 // AUTH PAGE COMPONENTS
@@ -70,6 +71,16 @@ const router = createRouter({
                             },
                         },
                     ],
+                },
+                {
+                    path: "facilities",
+                    name: "facilities-list",
+                    component: Facilities,
+                    meta: {
+                        requiresAuth: true,
+                        title: "Facilities List",
+                        permission: "view facilities",
+                    },
                 },
                 {
                     path: "/globals",
