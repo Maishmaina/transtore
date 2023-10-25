@@ -21,7 +21,7 @@
                             Filter
                         </button>
                     </template>
-                    <button type="button" class="btn btn-primary" @click="$emit('addClicked')">Add {{ resource }}</button>
+                    <button type="button" class="btn btn-primary" @click="$emit('addClicked')" v-if="permissions.includes(addPermission)">Add {{ resource }}</button>
                 </div>
             </div>
         </div>
@@ -53,6 +53,9 @@
 <script setup>
 import { ref, watch } from 'vue'
 import throttle from 'lodash/throttle'
+import { useAuthStore } from '@/stores/authStore.js'
+
+const { permissions } = useAuthStore()
 
 defineProps({
     processing: Boolean,
@@ -62,7 +65,8 @@ defineProps({
     filterable: {
         type: Boolean,
         default: true
-    }
+    },
+    addPermission: String
 })
 
 const emit = defineEmits([
