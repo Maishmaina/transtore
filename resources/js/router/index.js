@@ -9,6 +9,7 @@ import Main from "@/components/Main.vue";
 import Home from "@/pages/Home.vue";
 import Users from "@/pages/Users.vue";
 import Admins from "@/pages/Admins.vue";
+import FacilityOwners from "@/pages/FacilityOwners.vue";
 import Facilities from "@/pages/Facilities.vue";
 import RolesAndPermissions from "@/pages/RolesAndPermissions.vue";
 
@@ -73,14 +74,29 @@ const router = createRouter({
                     ],
                 },
                 {
-                    path: "facilities",
-                    name: "facilities-list",
-                    component: Facilities,
-                    meta: {
-                        requiresAuth: true,
-                        title: "Facilities List",
-                        permission: "view facilities",
-                    },
+                    path: "/facilities",
+                    children: [
+                        {
+                            path: "facility-owners",
+                            name: "facility-owners",
+                            component: FacilityOwners,
+                            meta: {
+                                requiresAuth: true,
+                                title: "Facilities Owners",
+                                permission: "view facility owners",
+                            },
+                        },
+                        {
+                            path: "facilities-list",
+                            name: "facilities-list",
+                            component: Facilities,
+                            meta: {
+                                requiresAuth: true,
+                                title: "Facilities List",
+                                permission: "view facilities",
+                            },
+                        },
+                    ],
                 },
                 {
                     path: "/globals",
