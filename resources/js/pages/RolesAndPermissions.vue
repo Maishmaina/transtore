@@ -4,6 +4,7 @@
         :fetchedData="roles"
         :processing="processing"
         :filterable="false"
+        add-permission="create roles"
         @add-clicked="showAddModal"
     >
         <template #thead>
@@ -11,7 +12,7 @@
             <th>Permissions</th>
             <th>Operators</th>
             <th>Date Created</th>
-            <th class="text-end">Actions</th>
+            <th class="text-end" v-if="userPermissions.includes('edit role') || userPermissions.includes('delete roles')">Actions</th>
         </template>
 
         <template #tbody>
@@ -21,13 +22,16 @@
                     <td>{{ `${role.permissions_count} of ${allPermissions.length}` }}</td>
                     <td>{{ role.users_count }}</td>
                     <td>{{ moment(role.created_at).format('MMMM Do YYYY') }}</td>
-                    <td class="text-end">
+                    <td class="text-end" v-if="userPermissions.includes('edit role') || userPermissions.includes('delete roles')">
                         <template v-if="role.id !== 1">
-                            <button type="button" class="btn btn-sm btn-primary" @click="showPermissionsModal(role)">
+                            <button type="button" class="btn btn-sm btn-primary" @click="showPermissionsModal(role)" v-if="userPermissions.includes('edit roles')">
                                 <i class="fa-solid fa-rotate"></i>
                                 Sync Permissions
                             </button>
-                            <button type="button" class="ms-2 btn btn-sm btn-icon btn-danger" @click="deleteRole(role.id)">
+                            <button type="button" class="ms-2 btn btn-sm btn-icon btn-primary" @click="showEditModal(role)" v-if="userPermissions.includes('edit roles')">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button type="button" class="ms-2 btn btn-sm btn-icon btn-danger" @click="deleteRole(role.id)" v-if="userPermissions.includes('delete roles')">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </template>
@@ -41,7 +45,7 @@
         </template>
     </TabularTemplate>
     
-    <Modal id="add-modal" title="Add Role">
+    <Modal id="role-modal" :title="`${editRole ? 'Edit ' : 'Add '} Role`">
         <template #modal-body>
             <div class="form-group">
                 <label for="name" class="required form-label">Name</label>
@@ -74,7 +78,7 @@
     <Modal id="permissions-modal" :title="currentRole.name + ' Permissions'" size="large">
         <template #modal-body>
             <div class="row">
-                <div class="my-3 col-md-3" v-for="permission in allPermissions" :key="permission">
+                <div class="my-3 col-md-4" v-for="permission in allPermissions" :key="permission">
                     <div class="form-check form-check-custom form-check-solid">
                         <input class="form-check-input" type="checkbox" :value="permission" :id="permission" v-model="permissions"/>
                         <label class="form-check-label" :for="permission">
@@ -108,7 +112,7 @@ import TabularTemplate from '@/components/TabularTemplate.vue'
 import Modal from '@/components/Modal.vue'
 import { toast } from 'vue3-toastify'
 
-const { token } = useAuthStore()
+const { token, permissions: userPermissions } = useAuthStore()
 
 const config = {
     headers: {
@@ -149,15 +153,35 @@ onMounted(() => {
         })
 })
 
-const showAddModal = () => {
-    $('#add-modal').modal('show')
-}
-
-const errors = ref({})
+const editRole = ref(false)
+const roleId = ref(null)
 
 const form = ref({
     name: '',
 })
+
+const clearForm = () => {
+    form.value.name = ''
+
+    editRole.value = false
+    roleId.value = null
+}
+
+const showAddModal = () => {
+    clearForm()
+    $('#role-modal').modal('show')
+}
+
+
+const showEditModal = (role) => {
+    editRole.value = true
+    roleId.value = role.id
+    form.value.name = role.name
+    
+    $('#role-modal').modal('show')
+}
+
+const errors = ref({})
 
 const submitForm = async () => {
     errors.value = {}
@@ -165,20 +189,29 @@ const submitForm = async () => {
     
     let response = null
     try {
-        response = await axios.post('roles', form.value, config)
+        if (editRole.value) {
+            response = await axios.patch(`roles/${roleId.value}`, form.value, config)
+        } else {
+            response = await axios.post('roles', form.value, config)
+        }
     } catch (error) {
         response = error.response
     }
-    
+
     if (response.status == 201) {
         toast.success("Role added successfully")
-        $('#add-modal .btn-sm').click()
-        form.value.name = ''
-        fetchRoles()
+    } else if (response.status == 200) {
+        toast.success("Role updated successfully")
     } else if (response.status == 422) {
         toast.error("Error adding role")
+    }
+    
+    if ([200, 201].includes(response.status)) {
+        $('#role-modal .btn-sm').click()
+        clearForm()
+        fetchRoles()
+    } else {
         errors.value = response.data.errors
-
         processing.value = false
     }
 }
