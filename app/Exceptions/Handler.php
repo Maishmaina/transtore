@@ -32,7 +32,9 @@ class Handler extends ExceptionHandler
         $this->renderable(function (NotFoundHttpException $e, $request) {
             preg_match('/\[(.*?)\]/', $e->getMessage(), $matches);
 
-            $model = getModelName(substr($matches[1], 11));
+            $model = str_replace('Spatie\Permission', 'App', $matches[1]);
+
+            $model = getModelName(substr($model, 11));
 
             if ($request->wantsJson() || $request->is('api/*')) {
                 return response()->json(["message" => "$model not found"], 404);
