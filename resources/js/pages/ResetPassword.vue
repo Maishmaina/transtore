@@ -16,17 +16,11 @@
         </div>
 
         <div class="fv-row mb-8">
-            <input type="password" placeholder="Password" autocomplete="off" class="form-control bg-transparent" :class="{'is-invalid': errors.password}" v-model="form.password" />
-            <div class="invalid-feedback" v-if="errors.password">
-                {{ errors.password[0] }}
-            </div>
+            <PasswordInput :errors="errors" @input-changed="form.password = $event" />
         </div>
 
         <div class="fv-row mb-8">
-            <input type="password" placeholder="Repeat Password" autocomplete="off" class="form-control bg-transparent" :class="{'is-invalid': errors.password_confirmation}" v-model="form.password_confirmation" />
-            <div class="invalid-feedback" v-if="errors.password_confirmation">
-                {{ errors.password_confirmation[0] }}
-            </div>
+            <PasswordInput :errors="errors" placeholder="Repeat password" field-name="password-confirmation" @input-changed="form.password_confirmation = $event" />
         </div>
         <div class="d-grid mb-10">
             <button type="submit" id="kt_new_password_submit" class="btn btn-primary">
@@ -44,6 +38,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
 import { toast } from "vue3-toastify";
+import PasswordInput from '@/components/PasswordInput.vue';
 
 const router = useRouter()
 
@@ -74,7 +69,7 @@ const submitForm = async () => {
     processing.value = false
 
     if (response.status == 200) {
-        router.push({name: 'login'})
+        router.push({name: 'login', query: {password_changed: true}})
     }
 }
 
