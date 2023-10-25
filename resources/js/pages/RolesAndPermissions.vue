@@ -167,21 +167,24 @@ const clearForm = () => {
     roleId.value = null
 }
 
+const errors = ref({})
+
+
 const showAddModal = () => {
+    errors.value = {}
     clearForm()
     $('#role-modal').modal('show')
 }
 
 
 const showEditModal = (role) => {
+    errors.value = {}
     editRole.value = true
     roleId.value = role.id
     form.value.name = role.name
     
     $('#role-modal').modal('show')
 }
-
-const errors = ref({})
 
 const submitForm = async () => {
     errors.value = {}
@@ -204,15 +207,15 @@ const submitForm = async () => {
         toast.success("Role updated successfully")
     } else if (response.status == 422) {
         toast.error("Error adding role")
+
+        errors.value = response.data.errors
+        processing.value = false
     }
     
     if ([200, 201].includes(response.status)) {
         $('#role-modal .btn-sm').click()
         clearForm()
         fetchRoles()
-    } else {
-        errors.value = response.data.errors
-        processing.value = false
     }
 }
 
