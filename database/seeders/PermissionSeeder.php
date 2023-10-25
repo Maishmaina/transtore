@@ -21,6 +21,7 @@ class PermissionSeeder extends Seeder
             'delete customers',
 
             'view operators',
+            'view operator details',
             'create operators',
             'edit operators',
             'delete operators',
