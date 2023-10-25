@@ -12,10 +12,7 @@
             </div>
         </div>
         <div class="fv-row mb-3">
-            <input type="password" placeholder="Password" class="form-control bg-transparent" :class="{'is-invalid': errors.password}" v-model="form.password" />
-            <div class="invalid-feedback" v-if="errors.password">
-                {{ errors.password[0] }}
-            </div>
+            <PasswordInput :errors="errors" @input-changed="form.password = $event" />
         </div>
         <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
             <div></div>
@@ -34,13 +31,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router';
+import { ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 import { toast } from "vue3-toastify";
+import PasswordInput from '@/components/PasswordInput.vue';
 
+const route = useRoute()
 const router = useRouter()
 let { login } = useAuthStore()
+
+if (route.query.password_changed) {
+    toast.success('Password changed successfully. Please login.')
+}
 
 const form = ref({
     email: '',
