@@ -15,6 +15,7 @@ class PermissionSeeder extends Seeder
     {
         $permissions = [
             'view customers',
+            'view customer details',
             'create customers',
             'edit customers',
             'delete customers',
