@@ -37,12 +37,12 @@
                         <slot name="tbody" />
                     </tbody>
                 </table>
-                <div class="mt-3 d-flex justify-content-between align-items-center" v-if="fetchedData.data?.length && !filter">
-                    <div>{{ `Showing ${fetchedData.meta?.from ?? fetchedData.from ?? 0} to ${fetchedData.meta?.to ?? fetchedData.to ?? 0} of ${fetchedData.meta?.total ?? fetchedData.total} entries` }}</div>
-                    <nav>
-                        <slot name="pagination" />
-                    </nav>
-                </div>
+            </div>
+            <div class="mt-3 d-flex justify-content-between align-items-center" v-if="fetchedData.data?.length && !filter">
+                <div>{{ `Showing ${fetchedData.meta?.from ?? fetchedData.from ?? 0} to ${fetchedData.meta?.to ?? fetchedData.to ?? 0} of ${fetchedData.meta?.total ?? fetchedData.total} entries` }}</div>
+                <nav>
+                    <slot name="pagination" />
+                </nav>
             </div>
         </div>
     </div>
