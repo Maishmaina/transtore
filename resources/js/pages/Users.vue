@@ -4,6 +4,7 @@
         :fetched-data="users" 
         :processing="processing" 
         :filter="filter"
+        add-permission="create customers"
         @add-clicked="showAddModal"
         @searching="searching"
         @clear-filters="clearFilters"
@@ -16,7 +17,7 @@
             <th>Email</th>
             <th>Date Joined</th>
             <th>Status</th>
-            <th class="text-end">Actions</th>
+            <th class="text-end" v-if="permissions.includes('view customer details') || permissions.includes('delete customers')">Actions</th>
         </template>
 
         <template #tbody>
@@ -31,11 +32,11 @@
                         <span class="badge badge-light-success" v-if="user.enabled">Enabled</span>
                         <span class="badge badge-light-danger" v-else>Disabled</span>
                     </td>
-                    <td class="text-end">
-                        <a href="#" type="button" class="btn btn-sm btn-icon btn-primary">
+                    <td class="text-end" v-if="permissions.includes('view customer details') || permissions.includes('delete customers')">
+                        <a href="#" type="button" class="btn btn-sm btn-icon btn-primary" v-if="permissions.includes('view customer details')">
                             <i class="fa-solid fa-eye"></i>
                         </a>
-                        <button type="button" class="ms-2 btn btn-sm btn-icon btn-danger" @click="deleteUser(user.id)">
+                        <button type="button" class="ms-2 btn btn-sm btn-icon btn-danger" @click="deleteUser(user.id)" v-if="permissions.includes('delete customers')">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </td>
@@ -212,7 +213,7 @@ import { Bootstrap5Pagination as Pagination } from 'laravel-vue-pagination';
 import TabularTemplate from '@/components/TabularTemplate.vue'
 import Modal from '@/components/Modal.vue'
 
-const { token } = useAuthStore()
+const { token, permissions } = useAuthStore()
 
 const config = {
     headers: {
