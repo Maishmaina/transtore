@@ -41,6 +41,7 @@
     
                                 <NavSubMenu title="Globals" icon-class="ki-outline ki-setting-2 fs-2" >
                                     <NavLink title="Roles & Permissions" :route="{name: 'roles-and-permissions'}" v-if="permissions.includes('view roles')"/>
+                                    <NavLink title="Storage Types" :route="{name: 'storage-types'}" v-if="permissions.includes('view storage types')"/>
                                 </NavSubMenu>
                             </div>
 
