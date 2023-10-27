@@ -5,6 +5,7 @@ use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\FacilityOwnerController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
 Route::prefix('admin')->group(function () {
@@ -30,5 +31,8 @@ Route::prefix('admin')->group(function () {
         Route::get('permissions', function () {
             return response()->json(Permission::get()->pluck('name'));
         });
+
+        // FACILITY OWNERS ROUTES
+        Route::apiResource('facility-owners', FacilityOwnerController::class);
     });
 });
