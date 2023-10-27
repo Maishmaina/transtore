@@ -5,7 +5,9 @@ use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\StorageTypeController;
 use App\Http\Controllers\Admin\FacilityOwnerController;
+use App\Http\Controllers\Admin\StorageSubtypeController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 
 Route::prefix('admin')->group(function () {
@@ -34,5 +36,11 @@ Route::prefix('admin')->group(function () {
 
         // FACILITY OWNERS ROUTES
         Route::apiResource('facility-owners', FacilityOwnerController::class);
+
+        // STORAGE TYPES ROUTES
+        Route::apiResource('storage-types', StorageTypeController::class);
+
+        // STORAGE SUBTYPES ROUTES
+        Route::apiResource('storage-subtypes', StorageSubtypeController::class);
     });
 });
