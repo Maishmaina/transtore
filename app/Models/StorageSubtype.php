@@ -11,6 +11,7 @@ class StorageSubtype extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'storage_type_id',
         'name'
     ];
 }
