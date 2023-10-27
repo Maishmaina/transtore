@@ -37,6 +37,7 @@ class PermissionSeeder extends Seeder
             'delete facilities',
 
             'view facility owners',
+            'view facility owner details',
             'create facility owners',
             'edit facility owners',
             'delete facility owners',
