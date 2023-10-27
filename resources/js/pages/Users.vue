@@ -229,7 +229,6 @@ const search = ref('')
 
 const searching = (value) => {
     search.value = value
-    fetchUsers()
 }
 
 const filters = ref({
@@ -293,10 +292,10 @@ const form = ref({
 })
 
 const clearForm = () => {
-    form.value.first_name = '',
-    form.value.last_name = '',
-    form.value.phone_number = '',
-    form.value.email = '',
+    form.value.first_name = ''
+    form.value.last_name = ''
+    form.value.phone_number = ''
+    form.value.email = ''
     form.value.enabled = true
 }
 
