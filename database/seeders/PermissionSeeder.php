@@ -32,6 +32,7 @@ class PermissionSeeder extends Seeder
             'delete roles',
 
             'view facilities',
+            'view facility details',
             'create facilities',
             'edit facilities',
             'delete facilities',
