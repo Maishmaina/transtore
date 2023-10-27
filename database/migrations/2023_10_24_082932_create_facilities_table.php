@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('location_latitude');
             $table->string('location_longitude');
             $table->string('access_period');
+            $table->boolean('enabled')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });
