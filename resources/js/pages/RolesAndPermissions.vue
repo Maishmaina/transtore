@@ -12,7 +12,7 @@
             <th>Permissions</th>
             <th>Operators</th>
             <th>Date Created</th>
-            <th class="text-end" v-if="userPermissions.includes('edit role') || userPermissions.includes('delete roles')">Actions</th>
+            <th class="text-end" v-if="userPermissions.includes('edit roles') || userPermissions.includes('delete roles')">Actions</th>
         </template>
 
         <template #tbody>
@@ -22,7 +22,7 @@
                     <td>{{ `${role.permissions_count} of ${allPermissions.length}` }}</td>
                     <td>{{ role.users_count }}</td>
                     <td>{{ moment(role.created_at).format('MMMM Do YYYY') }}</td>
-                    <td class="text-end" v-if="userPermissions.includes('edit role') || userPermissions.includes('delete roles')">
+                    <td class="text-end" v-if="userPermissions.includes('edit roles') || userPermissions.includes('delete roles')">
                         <template v-if="role.id !== 1">
                             <button type="button" class="btn btn-sm btn-primary" @click="showPermissionsModal(role)" v-if="userPermissions.includes('edit roles')">
                                 <i class="fa-solid fa-rotate"></i>
@@ -52,8 +52,8 @@
                 <input type="text" 
                     class="form-control form-control-solid" 
                     :class="{'is-invalid': errors.name}"
-                    id="first-name" 
-                    placeholder="Enter first name" 
+                    id="name" 
+                    placeholder="Enter name" 
                     v-model="form.name" 
                     :readonly="processing"
                 />
