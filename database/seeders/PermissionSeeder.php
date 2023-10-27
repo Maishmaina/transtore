@@ -41,6 +41,11 @@ class PermissionSeeder extends Seeder
             'create facility owners',
             'edit facility owners',
             'delete facility owners',
+
+            'view storage types',
+            'create storage types',
+            'edit storage types',
+            'delete storage types',
         ];
 
         foreach ($permissions as $permission) {
