@@ -28,11 +28,7 @@ export const useAuthStore = defineStore(
         const logout = async () => {
             let response = null;
             try {
-                response = await axios.delete("logout", {
-                    headers: {
-                        Authorization: `Bearer ${token.value}`,
-                    },
-                });
+                response = await axios.delete("logout", config.value);
             } catch (error) {
                 response = error.response;
             }
@@ -45,7 +41,15 @@ export const useAuthStore = defineStore(
             return response;
         };
 
-        return { authUser, token, permissions, login, logout };
+        const config = computed(() => {
+            return {
+                headers: {
+                    Authorization: `Bearer ${token.value}`,
+                },
+            };
+        });
+
+        return { authUser, token, permissions, login, logout, config };
     },
     {
         persist: true,
