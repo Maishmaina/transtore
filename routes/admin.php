@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
+use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
@@ -42,5 +43,8 @@ Route::prefix('admin')->group(function () {
 
         // STORAGE SUBTYPES ROUTES
         Route::apiResource('storage-subtypes', StorageSubtypeController::class);
+
+        // FACILITY ROUTES
+        Route::apiResource('facilities', FacilityController::class);
     });
 });
