@@ -36,6 +36,7 @@ export const useAuthStore = defineStore(
             if (response.status == 200) {
                 authUser.value = null;
                 token.value = null;
+                permissions.value = [];
             }
 
             return response;
