@@ -4,7 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Traits\UserTrait;
+use App\Traits\UserScopesTrait;
+use App\Traits\GlobalScopesTrait;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,7 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, UserTrait;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, UserScopesTrait, GlobalScopesTrait;
 
     /**
      * The attributes that are mass assignable.
