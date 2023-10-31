@@ -14,14 +14,21 @@ class FacilityOwnerController extends Controller
      */
     public function index(Request $request)
     {
+        $paginate = $request->query('paginate', 'true');
+
         $facilityOwners = FacilityOwner::search($request->search)
             ->firstName($request->first_name)
             ->lastName($request->last_name)
             ->phoneNumber($request->phone_number)
             ->email($request->email)
             ->date($request->from_date, $request->to_date)
-            ->latest()
-            ->paginate();
+            ->latest();
+
+        if ($paginate == 'true') {
+            $facilityOwners = $facilityOwners->paginate();
+        } else {
+            $facilityOwners = $facilityOwners->get();
+        }
 
         return response()->json($facilityOwners);
     }
