@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Traits\GlobalScopesTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Facility extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, GlobalScopesTrait;
 
     protected $fillable = [
         'facility_owner_id',
@@ -58,5 +59,36 @@ class Facility extends Model
         return Attribute::make(
             get: fn () => "$this->location_latitude, $this->location_longitude"
         );
+    }
+
+    public function scopeSearch($query, $keyword)
+    {
+        return $query->where(function ($query) use ($keyword) {
+            return $query->where('name', 'like', '%' . $keyword . '%')
+                ->orWhere('location', 'like', '%' . $keyword . '%')
+                ->orWhereHas('owner', function ($query) use ($keyword) {
+                    $query->where('first_name', 'like', '%' . $keyword . '%')
+                        ->orWhere('last_name', 'like', '%' . $keyword . '%');
+                });
+        });
+    }
+
+    public function scopeName($query, $name)
+    {
+        return $query->where('name', 'like', '%' . $name . '%');
+    }
+
+    public function scopeLocation($query, $location)
+    {
+        return $query->where('location', 'like', '%' . $location . '%');
+    }
+
+    public function scopeFacilityOwner($query, $facilityOwnerId)
+    {
+        return $query->when($facilityOwnerId, function ($query) use ($facilityOwnerId) {
+            return $query->whereHas('owner', function ($query) use ($facilityOwnerId) {
+                return $query->where('id', $facilityOwnerId);
+            });
+        });
     }
 }
