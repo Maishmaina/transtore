@@ -146,13 +146,12 @@
                             <div class="menu-item px-3">
                                 <div class="menu-content d-flex align-items-center px-3">
                                     <div class="symbol symbol-50px me-5">
-                                        <img alt="Logo" src="/assets/media/avatars/300-5.jpg" />
+                                        <img alt="Logo" src="/assets/media/avatars/default-user.png" />
                                     </div>
 
                                     <div class="d-flex flex-column">
                                         <div class="fw-bold d-flex align-items-center fs-5">
                                             {{ authUser.full_name }}
-                                            <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Admin</span>
                                         </div>
                                         <p class="fw-semibold text-muted fs-7">{{ authUser.email }}</p>
                                     </div>
