@@ -41,6 +41,8 @@ const route = useRoute()
 const router = useRouter()
 let { login } = useAuthStore()
 
+
+
 if (route.query.password_changed) {
     toast.success('Password changed successfully. Please login.')
 }
@@ -56,7 +58,7 @@ const processing = ref(false)
 
 const submitForm = async () => {
     errors.value = {}
-    
+
     processing.value = true
 
     let response = await login(form.value)
@@ -68,7 +70,7 @@ const submitForm = async () => {
         window.location.href = '/'
     } else {
         let error = response.data
-        
+
         toast.error(error.message)
         errors.value = error.errors ?? {}
     }

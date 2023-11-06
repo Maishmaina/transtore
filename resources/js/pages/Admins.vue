@@ -1,8 +1,8 @@
 <template>
-    <TabularTemplate 
-        resource="Operator" 
-        :fetched-data="admins" 
-        :processing="processing" 
+    <TabularTemplate
+        resource="Operator"
+        :fetched-data="admins"
+        :processing="processing"
         :filter="filter"
         add-permission="create operators"
         @add-clicked="showAddModal"
@@ -19,7 +19,7 @@
             <th>Status</th>
             <th class="text-end" v-if="permissions.includes('view operator details') || permissions.includes('delete operators')">Actions</th>
         </template>
-        
+
         <template #tbody>
             <template v-if="admins.data.length">
                 <tr v-for="admin in admins.data" :key="admin.id">
@@ -36,9 +36,9 @@
                         <a href="#" type="button" class="btn btn-sm btn-icon btn-primary" v-if="permissions.includes('view operator details')">
                             <i class="fa-solid fa-eye"></i>
                         </a>
-                        <button 
-                            type="button" 
-                            class="ms-2 btn btn-sm btn-icon btn-danger" 
+                        <button
+                            type="button"
+                            class="ms-2 btn btn-sm btn-icon btn-danger"
                             @click="deleteAdmin(admin.id)"
                             v-if="admin.id !== authUser.id && permissions.includes('delete operators')"
                         >
@@ -61,12 +61,12 @@
         <template #modal-body>
             <div class="form-group">
                 <label for="first-name" class="required form-label">First Name</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.first_name}"
-                    id="first-name" 
-                    placeholder="Enter first name" 
-                    v-model="form.first_name" 
+                    id="first-name"
+                    placeholder="Enter first name"
+                    v-model="form.first_name"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.first_name">
@@ -75,12 +75,12 @@
             </div>
             <div class="form-group">
                 <label for="last-name" class="required form-label">Last Name</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.last_name}"
-                    id="last-name" 
-                    placeholder="Enter last name" 
-                    v-model="form.last_name" 
+                    id="last-name"
+                    placeholder="Enter last name"
+                    v-model="form.last_name"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.last_name">
@@ -89,12 +89,12 @@
             </div>
             <div class="form-group">
                 <label for="phone-number" class="form-label">Phone No.</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.phone_number}"
-                    id="phone-number" 
-                    placeholder="Enter phone number" 
-                    v-model="form.phone_number" 
+                    id="phone-number"
+                    placeholder="Enter phone number"
+                    v-model="form.phone_number"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.phone_number">
@@ -103,12 +103,12 @@
             </div>
             <div class="form-group">
                 <label for="email" class="required form-label">Email</label>
-                <input type="email" 
-                    class="form-control form-control-solid" 
+                <input type="email"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.email}"
-                    id="email" 
-                    placeholder="Enter email" 
-                    v-model="form.email" 
+                    id="email"
+                    placeholder="Enter email"
+                    v-model="form.email"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.email">
@@ -141,42 +141,42 @@
             </button>
         </template>
     </Modal>
-    
+
     <Modal id="filter-modal" title="Filter Operators">
         <template #modal-body>
             <div class="form-group">
                 <label for="filter-first-name" class="form-label">First Name</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
-                    id="filter-first-name" 
-                    v-model="filters.first_name" 
+                <input type="text"
+                    class="form-control form-control-solid"
+                    id="filter-first-name"
+                    v-model="filters.first_name"
                     :readonly="processing"
                 />
             </div>
             <div class="form-group">
                 <label for="filter-last-name" class="form-label">Last Name</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
-                    id="filter-last-name" 
-                    v-model="filters.last_name" 
+                <input type="text"
+                    class="form-control form-control-solid"
+                    id="filter-last-name"
+                    v-model="filters.last_name"
                     :readonly="processing"
                 />
             </div>
             <div class="form-group">
                 <label for="filter-phone-number" class="form-label">Phone No.</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
-                    id="filter-phone-number" 
-                    v-model="filters.phone_number" 
+                <input type="text"
+                    class="form-control form-control-solid"
+                    id="filter-phone-number"
+                    v-model="filters.phone_number"
                     :readonly="processing"
                 />
             </div>
             <div class="form-group">
                 <label for="filter-email" class="form-label">Email</label>
-                <input type="email" 
-                    class="form-control form-control-solid" 
-                    id="filter-email" 
-                    v-model="filters.email" 
+                <input type="email"
+                    class="form-control form-control-solid"
+                    id="filter-email"
+                    v-model="filters.email"
                     :readonly="processing"
                 />
             </div>
@@ -230,7 +230,6 @@ const config = {
         Authorization: `Bearer ${token}`
     }
 }
-
 const processing = ref(true)
 
 const search = ref('')
@@ -267,14 +266,14 @@ const clearForm = () => {
 const submitForm = async () => {
     errors.value = {}
     processing.value = true
-    
+
     let response = null
     try {
         response = await axios.post('admins', form.value, config)
     } catch (error) {
         response = error.response
     }
-    
+
     if (response.status == 201) {
         toast.success("Operator added successfully")
         clearForm()
@@ -307,7 +306,7 @@ const fetchAdmins = async (page = 1) => {
     try {
         response = await axios.get(`admins`, {
             ...config,
-            
+
             params: {
                 page,
                 search: search.value,
@@ -323,7 +322,7 @@ const fetchAdmins = async (page = 1) => {
     } catch (error) {
         response = error.response
     }
-    
+
     if (response.status == 200) {
         admins.value = response.data
         processing.value = false
@@ -351,7 +350,7 @@ onMounted(async () => {
         .catch(() => {
             toast.error('Error fetching roles')
         })
-    
+
 })
 
 const showFilterModal = () => {
@@ -360,9 +359,9 @@ const showFilterModal = () => {
 
 const filterAdmins = async () => {
     $('#filter-modal .btn-sm').click()
-    
+
     processing.value = true
-    
+
     await fetchAdmins()
 
     filter.value = true
@@ -376,7 +375,7 @@ watch(() => filters.value.from_date, () => {
 
 const clearFilters = async () => {
     processing.value = true
-    
+
     filters.value.first_name = ''
     filters.value.last_name = ''
     filters.value.phone_number = ''

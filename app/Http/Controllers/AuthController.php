@@ -88,9 +88,7 @@ class AuthController extends Controller
         $request->validate([
             'verification_code' => 'required|exists:users,verification_code'
         ]);
-
         $user = User::where('verification_code', $request->verification_code)->first();
-
         try {
             $user->email_verified_at = now();
             $user->verification_code = null;
@@ -101,7 +99,6 @@ class AuthController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
-
         return response()->json([
             'message' => 'Account verified successfully'
         ]);

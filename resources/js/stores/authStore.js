@@ -7,7 +7,7 @@ export const useAuthStore = defineStore(
         const authUser = ref(null);
         const token = ref(null);
         const permissions = ref([]);
-
+        
         const login = async (data) => {
             let response = null;
             try {
@@ -15,16 +15,13 @@ export const useAuthStore = defineStore(
             } catch (error) {
                 response = error.response;
             }
-
             if (response.status == 200) {
                 authUser.value = response.data.admin;
                 token.value = response.data.token;
                 permissions.value = response.data.permissions;
             }
-
             return response;
         };
-
         const logout = async () => {
             let response = null;
             try {

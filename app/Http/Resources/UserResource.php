@@ -16,7 +16,6 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         $isAdmin = $request->user() instanceof Admin;
-
         return [
             'id' => $this->when($isAdmin, $this->id),
             'first_name' => $this->first_name,
