@@ -1,8 +1,8 @@
 <template>
     <TabularTemplate
-        resource="Facility" 
-        :fetched-data="facilities" 
-        :processing="processing" 
+        resource="Facility"
+        :fetched-data="facilities"
+        :processing="processing"
         :filter="filter"
         add-permission="create facilities"
         @add-clicked="showAddModal"
@@ -11,6 +11,7 @@
         @filter-clicked="showFilterModal"
     >
         <template #thead>
+            <th>#</th>
             <th>Name</th>
             <th>Owner</th>
             <th>Location</th>
@@ -23,7 +24,8 @@
 
         <template #tbody>
             <template v-if="facilities.data.length">
-                <tr v-for="facility in facilities.data">
+                <tr v-for="(facility,i) in facilities.data">
+                    <td>{{ i+1 }}</td>
                     <td>{{ facility.name }}</td>
                     <td>{{ facility.owner.full_name }}</td>
                     <td>{{ facility.location }}</td>
@@ -35,9 +37,9 @@
                         <span class="badge badge-light-danger" v-else>Disabled</span>
                     </td>
                     <td class="text-end" v-if="permissions.includes('view facility details') || permissions.includes('delete facilities')">
-                        <a href="#" type="button" class="btn btn-sm btn-icon btn-primary" v-if="permissions.includes('view facility details')">
+                        <router-link :to="{name: 'facilities-details', params:{id:facility.id} }" class="btn btn-sm btn-icon btn-primary" v-if="permissions.includes('view facility details')">
                             <i class="fa-solid fa-eye"></i>
-                        </a>
+                        </router-link>
                         <button type="button" class="ms-2 btn btn-sm btn-icon btn-danger" @click="deleteFacility(facility.id)" v-if="permissions.includes('delete facilities')">
                             <i class="fa-solid fa-trash"></i>
                         </button>
@@ -48,12 +50,10 @@
                 <td colspan="7" class="text-center">No data available</td>
             </tr>
         </template>
-
         <template #pagination>
             <Pagination :data="facilities" @pagination-change-page="fetchFacilities" :limit="5" />
         </template>
     </TabularTemplate>
-
     <Modal id="add-modal" title="Add Facility">
         <template #modal-body>
             <div class="form-group">
@@ -67,12 +67,12 @@
             </div>
             <div class="form-group">
                 <label for="name" class="required form-label">Name</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.name}"
-                    id="name" 
-                    placeholder="Enter facility name" 
-                    v-model="form.name" 
+                    id="name"
+                    placeholder="Enter facility name"
+                    v-model="form.name"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.name">
@@ -81,12 +81,12 @@
             </div>
             <div class="form-group">
                 <label for="location" class="required form-label">Location</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.location}"
-                    id="location" 
-                    placeholder="Enter facility location" 
-                    v-model="form.location" 
+                    id="location"
+                    placeholder="Enter facility location"
+                    v-model="form.location"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.location">
@@ -95,12 +95,12 @@
             </div>
             <div class="form-group">
                 <label for="location_latitude" class="required form-label">Location Latitude</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.location_latitude}"
-                    id="location_latitude" 
-                    placeholder="Enter location latitude" 
-                    v-model="form.location_latitude" 
+                    id="location_latitude"
+                    placeholder="Enter location latitude"
+                    v-model="form.location_latitude"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.location_latitude">
@@ -109,12 +109,12 @@
             </div>
             <div class="form-group">
                 <label for="location_longitude" class="required form-label">Location Longitude</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.location_longitude}"
-                    id="location_longitude" 
-                    placeholder="Enter location longitude" 
-                    v-model="form.location_longitude" 
+                    id="location_longitude"
+                    placeholder="Enter location longitude"
+                    v-model="form.location_longitude"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.location_longitude">
@@ -123,12 +123,12 @@
             </div>
             <div class="form-group">
                 <label for="access_period" class="required form-label">Access Period</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.access_period}"
-                    id="access_period" 
-                    placeholder="Enter access period" 
-                    v-model="form.access_period" 
+                    id="access_period"
+                    placeholder="Enter access period"
+                    v-model="form.access_period"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.access_period">
@@ -244,8 +244,8 @@ const fetchFacilities = async (page = 1) => {
     let response = null
     try {
         response = await axios.get(`facilities`, {
+
             ...config,
-            
             params: {
                 page,
                 search: search.value,
@@ -260,7 +260,7 @@ const fetchFacilities = async (page = 1) => {
     } catch (error) {
         response = error.response
     }
-    
+
     if (response.status == 200) {
         facilities.value = response.data
         processing.value = false
@@ -279,7 +279,7 @@ const fetchFacilityOwners = async (page = 1) => {
     } catch (error) {
         response = error.response
     }
-    
+
     if (response.status == 200) {
         facility_owners.value = response.data
     } else {
@@ -322,14 +322,14 @@ const clearForm = () => {
 const submitForm = async () => {
     errors.value = {}
     processing.value = true
-    
+
     let response = null
     try {
         response = await axios.post('facilities', form.value, config)
     } catch (error) {
         response = error.response
     }
-    
+
     if (response.status == 201) {
         toast.success("Facility added successfully")
         clearForm()
@@ -351,9 +351,9 @@ const showFilterModal = () => {
 
 const filterFacilities = async () => {
     $('#filter-modal .btn-sm').click()
-    
+
     processing.value = true
-    
+
     await fetchFacilities()
 
     filter.value = true
@@ -367,7 +367,7 @@ watch(() => filters.value.from_date, () => {
 
 const clearFilters = async () => {
     processing.value = true
-    
+
     filters.value.facility_owner_id = ''
     filters.value.name = ''
     filters.value.location = ''
@@ -416,7 +416,6 @@ const deleteFacility = (id) => {
         }
     })
 }
-
 </script>
 
 <style scoped></style>

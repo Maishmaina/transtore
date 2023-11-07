@@ -11,6 +11,7 @@ import Users from "@/pages/Users.vue";
 import Admins from "@/pages/Admins.vue";
 import FacilityOwners from "@/pages/FacilityOwners.vue";
 import Facilities from "@/pages/Facilities.vue";
+import FacilityDetails from "@/pages/facility/FacilityDetails.vue";
 import RolesAndPermissions from "@/pages/RolesAndPermissions.vue";
 import StorageTypes from "@/pages/StorageTypes.vue";
 
@@ -95,6 +96,16 @@ const router = createRouter({
                                 requiresAuth: true,
                                 title: "Facilities List",
                                 permission: "view facilities",
+                            },
+                        },
+                        {
+                            path: "facilities-details/:id",
+                            name: "facilities-details",
+                            component: FacilityDetails,
+                            meta: {
+                                requiresAuth: true,
+                                title: "Facility Details",
+                                permission: "edit facilities",
                             },
                         },
                     ],

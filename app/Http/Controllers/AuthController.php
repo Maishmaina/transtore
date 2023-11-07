@@ -103,7 +103,6 @@ class AuthController extends Controller
             'message' => 'Account verified successfully'
         ]);
     }
-
     public function forgotPassword(Request $request)
     {
         $request->validate([
