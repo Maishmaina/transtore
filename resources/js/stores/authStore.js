@@ -7,7 +7,7 @@ export const useAuthStore = defineStore(
         const authUser = ref(null);
         const token = ref(null);
         const permissions = ref([]);
-        
+
         const login = async (data) => {
             let response = null;
             try {

@@ -1,0 +1,71 @@
+<template>
+<div class="card d-flex justify-content-center justify-content-xl-start flex-row-auto w-100 w-xl-300px w-xxl-400px">
+											<div class="card-body px-6 px-lg-10 px-xxl-15 py-20">
+												<div class="stepper-nav">
+
+                                                    <div class="stepper-item current" data-kt-stepper-element="nav">
+														<div class="stepper-wrapper">
+															<div class="stepper-icon w-40px h-40px">
+																<i class="ki-outline ki-check fs-2 stepper-check"></i>
+																<span class="stepper-number">1</span>
+															</div>
+															<div class="stepper-label">
+																<h3 class="stepper-title">Create Sections</h3>
+																<div class="stepper-desc fw-semibold">Setup Section Details</div>
+															</div>
+														</div>
+														<div class="stepper-line h-40px"></div>
+													</div>
+
+
+													<div class="stepper-item" data-kt-stepper-element="nav">
+
+														<div class="stepper-wrapper">
+															<div class="stepper-icon w-40px h-40px">
+																<i class="ki-outline ki-check fs-2 stepper-check"></i>
+																<span class="stepper-number">2</span>
+															</div>
+															<div class="stepper-label">
+																<h3 class="stepper-title">Aisle Settings</h3>
+																<div class="stepper-desc fw-semibold">Setup Your Aisles</div>
+															</div>
+														</div>
+														<div class="stepper-line h-40px"></div>
+													</div>
+													<div class="stepper-item" data-kt-stepper-element="nav">
+
+														<div class="stepper-wrapper">
+															<div class="stepper-icon w-40px h-40px">
+																<i class="ki-outline ki-check fs-2 stepper-check"></i>
+																<span class="stepper-number">3</span>
+															</div>
+															<div class="stepper-label">
+																<h3 class="stepper-title">Unit Settings</h3>
+																<div class="stepper-desc fw-semibold">Unit Settings</div>
+															</div>
+														</div>
+														<div class="stepper-line h-40px"></div>
+													</div>
+													<div class="stepper-item" data-kt-stepper-element="nav">
+
+														<div class="stepper-wrapper">
+															<div class="stepper-icon w-40px h-40px">
+																<i class="ki-outline ki-check fs-2 stepper-check"></i>
+																<span class="stepper-number">4</span>
+															</div>
+															<div class="stepper-label">
+																<h3 class="stepper-title">Submit</h3>
+																<div class="stepper-desc fw-semibold">Complete and Close</div>
+															</div>
+														</div>
+														<div class="stepper-line h-40px"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+</template>
+<script setup>
+
+</script>
+<style>
+</style>
