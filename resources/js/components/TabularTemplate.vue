@@ -75,13 +75,9 @@ const emit = defineEmits([
     'filterClicked',
     'clearFilters',
 ])
-
 const search = ref('')
-
 watch(() => search.value, throttle((value) => {
     emit('searching', value)
 }, 600))
-
 </script>
-
 <style scoped></style>

@@ -5,10 +5,14 @@ export const useFacilityStore = defineStore(
     () => {
 
         let steps = ref(1);
+        let setOne = ref([]);
         const stepsProgress = (position) => {
             steps.value = position;
         }
-        return { steps, stepsProgress };
+        const setSectionAisle = (form) => {
+            console.log(form);
+        }
+        return { steps, stepsProgress, setSectionAisle };
     },
     {
         persist: true,
