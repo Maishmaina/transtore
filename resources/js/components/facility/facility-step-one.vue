@@ -49,11 +49,11 @@
 import { reactive } from "vue";
 import { useFacilityStore } from "@/stores/facilityStore.js";
 
-const { setSectionAisle } = useFacilityStore();
+const { setOne,setSectionAisle } = useFacilityStore();
 
 const stpOne = reactive({
-    section: '',
-    aisle:''
+    section: setOne.section,
+    aisle:setOne.aisle
 })
 const submitStepOne = () => {
     setSectionAisle(stpOne);

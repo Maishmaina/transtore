@@ -6,10 +6,9 @@
         id="kt_create_account_stepper"
       >
         <facility-unit-steps :step="currentPost"></facility-unit-steps>
-
         <div class="card d-flex flex-row-fluid flex-center">
           <form
-            class="card-body py-20 w-100 mw-xl-700px px-9"
+            class="card-body py-20 w-100 mw-xl-800px px-1"
             novalidate="novalidate"
             id="kt_create_account_form"
           >
@@ -88,8 +87,8 @@ const previous = () => {
 
 const nextStep = () => {
     if (currentPost.value < 4) {
-         stepOne.value.submitStepOne();
-        if (_validate(currentPost.value, stepOne.value.stpOne)) {
+
+        if (_validate(currentPost.value)){
             let nextItem = Number(currentPost.value) + 1;
             stepsProgress(nextItem);
             currentPost.value = currentPost.value + 1;
@@ -100,15 +99,16 @@ const nextStep = () => {
   }
 };
 
-const _validate = (step,value) => {
+const _validate = (step) => {
     if (step === 1) {
+        let value=stepOne.value.stpOne;
+         stepOne.value.submitStepOne();
         if (value.section != "" && value.aisle != "") {
             return true;
         }
         return false;
     }
 }
-
 const route = useRoute();
 // console.log(route.params.id);
 </script>
