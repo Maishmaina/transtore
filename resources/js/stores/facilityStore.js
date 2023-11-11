@@ -27,6 +27,7 @@ export const useFacilityStore = defineStore(
             }
         }
         const setAisleUnit = (aisle) => {
+            //create units from the current aisle
             console.log(aisle);
         }
         return { steps, setOne, aisleListing, stepsProgress, setSectionAisle, setAisleUnit };

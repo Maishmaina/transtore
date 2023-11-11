@@ -64,7 +64,7 @@
                       id="filter-owner"
                       v-model="aisle.size"
                     >
-                      <option value>Select Size...</option>
+                      <option value="">Select Size...</option>
                       <option value="1" key="1">Small</option>
                       <option value="2" key="2">Medium</option>
                       <option value="3" key="3">Large</option>
@@ -113,7 +113,7 @@ const submitStepTwo = () => {
 
 defineExpose({
     submitStepTwo,
-   aisle
+    aisle
   })
 </script>
 <style scoped>

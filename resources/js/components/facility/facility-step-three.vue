@@ -15,15 +15,18 @@
         <div class="text-muted fw-semibold fs-6">Sep Three includes Units Settings</div>
       </div>
       <div class="fv-row">
-        <div class="row">
-          Unit Settings
-        </div>
+           <label class="btn btn-outline btn-outline-dashed btn-active-light-primary w-100 p-4">
+          <input type="radio" class="btn-check" name="account_team_size" value="1-1" />
+          <span class="fs-3 fw-bold">
+            Configure Units on each Aisle:
+          </span>
+        </label>
+
       </div>
     </div>
   </div>
 </template>
 <script setup>
-
 
 </script>
 <style scoped>

@@ -16,7 +16,7 @@
               <facility-step-one ref="stepOne"></facility-step-one>
             </div>
             <div v-if="currentPost===2">
-              <facility-step-two></facility-step-two>
+              <facility-step-two ref="stepTwo"></facility-step-two>
             </div>
             <div v-if="currentPost===3">
               <facility-step-three></facility-step-three>
@@ -76,6 +76,7 @@ const currentPost = ref(steps);
 
 //emit methods:
 const stepOne = ref(null);
+const stepTwo = ref(null);
 
 const previous = () => {
   if (currentPost.value > 1) {
@@ -96,17 +97,25 @@ const nextStep = () => {
             toast.error("Error Check All required Fields")
         }
 
-  }
+    }
+
 };
 
 const _validate = (step) => {
-    if (step === 1) {
+  if (step === 1) {
         let value=stepOne.value.stpOne;
          stepOne.value.submitStepOne();
-        if (value.section != "" && value.aisle != "") {
+        if (value.section != "" && value.aisle != ""){
             return true;
         }
         return false;
+  } else if (step === 2) {
+      let value = stepTwo.value.aisle.aisle;
+      stepTwo.value.submitStepTwo()
+    const result = !(value.some(obj => Object.values(obj).some(v => !v)))
+      return result;
+  } else if (step === 3){
+      return false;
     }
 }
 const route = useRoute();
