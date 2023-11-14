@@ -26,7 +26,6 @@
             <span class="fw-bold">{{ aisle.section.aisle }}</span>
           </span>
         </label>
-        {{aisle.aisle}}
         <div class="card-body pt-0">
           <div class="table-responsive">
             <table class="table table-striped align-middle table-row-dashed fs-6 gy-5">
@@ -40,7 +39,7 @@
                 </tr>
               </thead>
               <tbody class="fw-semibold text-gray-600">
-                <tr v-for="aisle in aisle.aisle">
+                <tr v-for="(aisle,i) in aisle.aisle" :key="i">
                   <td>
                     <input
                       type="text"
@@ -100,7 +99,8 @@
 <script setup>
 import { ref } from "vue";
 import { useFacilityStore } from "@/stores/facilityStore.js";
-const { setOne, aisleListing,setAisleUnit } = useFacilityStore();
+const { setOne, aisleListing, setAisleUnit } = useFacilityStore();
+
 const aisle = ref({
   section: setOne,
   aisle: aisleListing
@@ -108,7 +108,7 @@ const aisle = ref({
 
 const submitStepTwo = () => {
 
-    setAisleUnit(aisle);
+    setAisleUnit(aisle.value.aisle);
 }
 
 defineExpose({
