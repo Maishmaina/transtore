@@ -3,7 +3,7 @@
         <div class="card-header border-0 pt-6">
             <div class="card-title">
                 <template v-if="filterable">
-                    <div class="d-flex align-items-center position-relative my-1" v-if="fetchedData.data?.length || search">
+                    <div class="d-flex align-items-center position-relative my-1" v-if="fetchedData==undefined ? 0: fetchedData.data?.length || search">
                         <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5"></i>
                         <input type="search" class="form-control form-control-solid w-250px ps-12" placeholder="Search" v-model="search" />
                     </div>
@@ -16,7 +16,7 @@
                             <i class="ki-outline ki-filter fs-2"></i>
                             Clear Filters
                         </button>
-                        <button type="button" class="btn btn-light-primary me-3" @click="$emit('filterClicked')" v-if="fetchedData.data?.length || filter">
+                        <button type="button" class="btn btn-light-primary me-3" @click="$emit('filterClicked')" v-if="fetchedData==undefined ? 0 : fetchedData.data?.length || filter">
                             <i class="ki-outline ki-filter-search fs-2"></i>
                             Filter
                         </button>
@@ -38,7 +38,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="mt-3 d-flex justify-content-between align-items-center" v-if="fetchedData.data?.length && !filter">
+            <div class="mt-3 d-flex justify-content-between align-items-center" v-if="fetchedData==undefined ? 0 : fetchedData.data?.length && !filter">
                 <div>{{ `Showing ${fetchedData.meta?.from ?? fetchedData.from ?? 0} to ${fetchedData.meta?.to ?? fetchedData.to ?? 0} of ${fetchedData.meta?.total ?? fetchedData.total} entries` }}</div>
                 <nav>
                     <slot name="pagination" />
@@ -57,7 +57,7 @@ import { useAuthStore } from '@/stores/authStore.js'
 
 const { permissions } = useAuthStore()
 
-defineProps({
+const props=defineProps({
     processing: Boolean,
     filter: Boolean,
     fetchedData: Object,
@@ -68,6 +68,7 @@ defineProps({
     },
     addPermission: String
 })
+
 
 const emit = defineEmits([
     'searching',

@@ -4,7 +4,7 @@
             <Header />
 
             <div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
-                <div id="kt_app_toolbar" class="app-toolbar py-7 pt-lg-10 pb-lg-5">
+                <div id="kt_app_toolbar" class="app-toolbar py-1 pt-lg-1 pb-lg-1">
                     <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex align-items-stretch">
                         <div class="app-toolbar-container d-flex flex-column flex-row-fluid">
                             <div class="page-title gap-4 me-3 mb-3 mb-lg-5">

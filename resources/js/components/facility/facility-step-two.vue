@@ -34,58 +34,65 @@
                   <th>Name</th>
                   <th>Unit Number</th>
                   <th>Unit Size</th>
-                  <th>Dimension(ft)</th>
+                  <th>Dimension(cm)</th>
                   <th>Weight(Kg)</th>
+                  <th>Price</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody class="fw-semibold text-gray-600">
                 <tr v-for="(aisle,i) in aisle.aisle" :key="i">
                   <td>
-                    <input
-                      type="text"
-                      class="form-control form-control"
-                      id="location"
-                      v-model="aisle.name"
-                    />
+                    <input type="text" class="form-control" id="location" v-model="aisle.name" />
                   </td>
                   <td>
                     <input
                       type="number"
-                      class="form-control form-control"
+                      class="form-control"
                       id="location"
                       placeholder="10"
                       v-model="aisle.units"
                     />
                   </td>
                   <td>
-                    <select
-                      class="form-select form-select-solid"
-                      id="filter-owner"
-                      v-model="aisle.size"
-                    >
-                      <option value="">Select Size...</option>
+                    <select class="form-select" id="filter-owner" v-model="aisle.size">
+                      <option value>Select Size...</option>
                       <option value="1" key="1">Small</option>
                       <option value="2" key="2">Medium</option>
                       <option value="3" key="3">Large</option>
                     </select>
                   </td>
-                   <td>
+                  <td>
                     <input
                       type="text"
-                      class="form-control form-control"
+                      class="form-control"
                       id="location"
                       placeholder="5*5*10"
                       v-model="aisle.dimension"
                     />
                   </td>
-                   <td>
+                  <td>
                     <input
                       type="number"
-                      class="form-control form-control"
+                      class="form-control"
                       id="location"
                       placeholder="250"
                       v-model="aisle.weight"
                     />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="location"
+                      placeholder="250"
+                      v-model="aisle.price"
+                    />
+                  </td>
+                  <td>
+                    <i @click="duplicate(aisle)" type="button" class="fa-solid fa-copy text-primary "></i>
+
+                    <i @click="remove(aisle)" type="button" class="fa-solid fa-trash text-danger"></i>
                   </td>
                 </tr>
               </tbody>
@@ -107,14 +114,13 @@ const aisle = ref({
 });
 
 const submitStepTwo = () => {
-
-    setAisleUnit(aisle.value.aisle);
-}
+  setAisleUnit(aisle.value.aisle);
+};
 
 defineExpose({
-    submitStepTwo,
-    aisle
-  })
+  submitStepTwo,
+  aisle
+});
 </script>
 <style scoped>
 </style>

@@ -44,8 +44,9 @@
                         <th>Aisle Name</th>
                         <th>Unit Name</th>
                         <th>Unit Size</th>
-                        <th>Dimension(ft)</th>
+                        <th>Dimension(cm)</th>
                         <th>Weight(Kg)</th>
+                        <th>Price</th>
                       </tr>
                     </thead>
                     <tbody class="fw-semibold text-gray-600">
@@ -53,7 +54,7 @@
                         <td>
                           <input
                             type="text"
-                            class="form-control form-control"
+                            class="form-control"
                             id="location"
                             placeholder="Aisle 1"
                             disabled
@@ -63,7 +64,7 @@
                         <td>
                           <input
                             type="text"
-                            class="form-control form-control"
+                            class="form-control"
                             id="location"
                             placeholder="Unit 1"
                             v-model="in_unit.unitName"
@@ -71,7 +72,7 @@
                         </td>
                         <td>
                           <select
-                            class="form-select form-select-solid"
+                            class="form-select"
                             id="filter-owner"
                             v-model="in_unit.size"
                           >
@@ -84,7 +85,7 @@
                         <td>
                           <input
                             type="text"
-                            class="form-control form-control"
+                            class="form-control"
                             id="location"
                             placeholder="10*10*5"
                             v-model="in_unit.dimension"
@@ -93,10 +94,19 @@
                         <td>
                           <input
                             type="number"
-                            class="form-control form-control"
+                            class="form-control"
                             id="location"
                             placeholder="200"
                             v-model="in_unit.weight"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="location"
+                            placeholder="1000"
+                            v-model="in_unit.price"
                           />
                         </td>
                       </tr>
@@ -120,9 +130,8 @@ const { aisleListing } = useFacilityStore();
 const aisle_unit = ref(aisleListing);
 
 defineExpose({
-    aisle_unit
-})
-
+  aisle_unit
+});
 </script>
 <style scoped>
 </style>
