@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UnitsController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\FacilityController;
@@ -46,5 +47,8 @@ Route::prefix('admin')->group(function () {
 
         // FACILITY ROUTES
         Route::apiResource('facilities', FacilityController::class);
+
+        // UNITS ROUTES
+        Route::apiResource('units', UnitsController::class);
     });
 });

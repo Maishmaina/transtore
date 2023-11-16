@@ -24,7 +24,6 @@ class FacilityController extends Controller
 
         return response()->json($facilities);
     }
-
     /**
      * Store a newly created resource in storage.
      */

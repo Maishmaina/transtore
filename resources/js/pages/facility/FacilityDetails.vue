@@ -66,7 +66,7 @@
             id="kt_create_account_form"
           >
             <div v-if="currentPost===1">
-              <facility-step-one ref="stepOne"></facility-step-one>
+              <facility-step-one ref="stepOneUI"></facility-step-one>
             </div>
             <div v-if="currentPost===2">
               <facility-step-two ref="stepTwo"></facility-step-two>
@@ -95,11 +95,11 @@
                   type="button"
                   class="btn btn-lg btn-primary me-3"
                 >
-                  <span class="indicator-label">
+                  <span class="indicator-label" v-if="!processing">
                     Submit
                     <i class="ki-outline ki-arrow-right fs-3 ms-2 me-0"></i>
                   </span>
-                  <span class="indicator-progress">
+                  <span v-else >
                     Please wait...
                     <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                   </span>
@@ -120,25 +120,30 @@
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { toast } from "vue3-toastify";
+import axios from 'axios';
 import facilityUnitSteps from "@/components/facility/facility-unit-steps.vue";
 import facilityStepOne from "@/components/facility/facility-step-one.vue";
 import facilityStepTwo from "@/components/facility/facility-step-two.vue";
 import facilityStepThree from "@/components/facility/facility-step-three.vue";
 import facilityStepFour from "@/components/facility/facility-step-four.vue";
+import { useAuthStore } from '@/stores/authStore.js'
 import { useFacilityStore } from "@/stores/facilityStore.js";
+
 
 import { Bootstrap5Pagination as Pagination } from "laravel-vue-pagination";
 import TabularTemplate from "@/components/TabularTemplate.vue";
 
-const { tabState, steps, stepsProgress } = useFacilityStore();
+const { config } = useAuthStore();
+const { setOne,aisleListing,tabState, steps, stepsProgress } = useFacilityStore();
 
 const currentTabState = ref(tabState);
 const currentPost = ref(steps);
 
 //emit methods:
-const stepOne = ref(null);
+const stepOneUI = ref(null);
 const stepTwo = ref(null);
 const stepThree = ref(null);
+const processing = ref(false);
 
 const setCurrentTab = param => {
   currentTabState.value = param;
@@ -165,20 +170,22 @@ const nextStep = () => {
 };
 
 const _validate = step => {
-  if (step === 1) {
-    let value = stepOne.value.stpOne;
-    stepOne.value.submitStepOne();
+
+  if (step === 1){
+    let value = stepOneUI.value.stpOne;
+    stepOneUI.value.submitStepOne();
     if (value.section != "" && value.aisle != "") {
       return true;
     }
     return false;
-  } else if (step === 2) {
+  }else if (step === 2){
     let value = stepTwo.value.aisle.aisle;
     stepTwo.value.submitStepTwo();
     const result = !value.some(aisle => Object.values(aisle).some(i => !i));
     return result;
-  } else if (step === 3) {
-    let result = false;
+  }else if (step === 3) {
+      let result = false;
+
     let all_units = stepThree.value.aisle_unit;
     all_units.forEach(aisle_units => {
       const status = !aisle_units.unitsDetails.some(aisle =>
@@ -194,14 +201,50 @@ const _validate = step => {
   }
 };
 
-const submitData = () => {
-  /*
-    add to server.
-    clear all data on the local storage
-    get to all unit Listings
-     */
-    console.log(stepThree.value);
-  toast.success("Unit Mapping done successfully");
+/*
+const submitForm = async () => {
+    errors.value = {}
+    processing.value = true
+
+    let response = null
+    try {
+        response = await axios.post('facilities', form.value, config)
+    } catch (error) {
+        response = error.response
+    }
+
+    if (response.status == 201) {
+        toast.success("Facility added successfully")
+        clearForm()
+        $('#add-modal .btn-sm').click()
+        fetchFacilities()
+    } else if (response.status == 422) {
+        toast.error("Error adding facility")
+        errors.value = response.data.errors
+
+        processing.value = false
+    }
+}
+*/
+
+const submitData = async () => {
+    processing.value = true;
+    let result = null;
+
+    let submit_result = ref({
+        facility:route.params.id,
+        section: setOne,
+        result_aisle: aisleListing
+    })
+    try {
+
+        result = await axios.post('units',submit_result.value,config);
+
+    } catch (error) {
+        console.error(error);
+    }
+    console.log(result);
+    toast.success("Unit Mapping done successfully");
 };
 const route = useRoute();
 // console.log(route.params.id);

@@ -33,6 +33,7 @@
               <label class="form-label mb-3">Enter Number of Aisle*</label>
               <input
                 type="number"
+                min="1"
                 class="form-control form-control-lg "
                 name="aisle"
                 placeholder="Enter Number Aisle"

@@ -43,19 +43,22 @@
               <tbody class="fw-semibold text-gray-600">
                 <tr v-for="(aisle,i) in aisle.aisle" :key="i">
                   <td>
-                    <input type="text" class="form-control" id="location" v-model="aisle.name" />
+                    <input
+                    type="text"
+                    class="form-control"
+                    v-model="aisle.name" />
                   </td>
                   <td>
                     <input
                       type="number"
+                      min="1"
                       class="form-control"
-                      id="location"
                       placeholder="10"
                       v-model="aisle.units"
                     />
                   </td>
                   <td>
-                    <select class="form-select" id="filter-owner" v-model="aisle.size">
+                    <select class="form-select" v-model="aisle.size">
                       <option value>Select Size...</option>
                       <option value="1" key="1">Small</option>
                       <option value="2" key="2">Medium</option>
@@ -66,7 +69,6 @@
                     <input
                       type="text"
                       class="form-control"
-                      id="location"
                       placeholder="5*5*10"
                       v-model="aisle.dimension"
                     />
@@ -75,7 +77,6 @@
                     <input
                       type="number"
                       class="form-control"
-                      id="location"
                       placeholder="250"
                       v-model="aisle.weight"
                     />
@@ -84,15 +85,13 @@
                     <input
                       type="number"
                       class="form-control"
-                      id="location"
                       placeholder="250"
                       v-model="aisle.price"
                     />
                   </td>
                   <td>
-                    <i @click="duplicate(aisle)" type="button" class="fa-solid fa-copy text-primary "></i>
-
-                    <i @click="remove(aisle)" type="button" class="fa-solid fa-trash text-danger"></i>
+                    <i @click="duplicate(aisle)" type="button" class="fa-solid fa-copy text-primary" title="duplicate this Aisle"></i>
+                    <i @click="remove(aisle)" type="button" class="fa-solid fa-trash text-danger" title="remove this Aisle" style="margin-left:15px;"></i>
                   </td>
                 </tr>
               </tbody>
@@ -107,15 +106,31 @@
 import { ref } from "vue";
 import { useFacilityStore } from "@/stores/facilityStore.js";
 const { setOne, aisleListing, setAisleUnit } = useFacilityStore();
-
 const aisle = ref({
   section: setOne,
   aisle: aisleListing
 });
 
 const submitStepTwo = () => {
-  setAisleUnit(aisle.value.aisle);
+
+    setAisleUnit(aisle.value.aisle);
+
 };
+const duplicate = (asl) => {
+    let items = aisle.value.aisle;
+    let index = items.indexOf(asl);
+    let newIndex = index + 1;
+    items.splice(newIndex, 0, asl);
+
+}
+const remove = (asl) => {
+    let items = aisle.value.aisle;
+    let index = items.indexOf(asl);
+    if (index !== -1) {
+    items.splice(index, 1);
+}
+
+}
 
 defineExpose({
   submitStepTwo,

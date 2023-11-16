@@ -11,14 +11,13 @@
               <span class="stepper-number">1</span>
             </div>
             <div class="stepper-label">
-              <h3 class="stepper-title">Create Sections</h3>
+              <h3 class="stepper-title">Create Section</h3>
               <div class="stepper-desc fw-semibold">Setup Section Details</div>
             </div>
           </div>
           <div class="stepper-line h-40px"></div>
         </div>
-
-        <div class="stepper-item" :class="step==2 ? 'current':'' ">
+        <div class="stepper-item" :class="step==2 ? 'current':''">
           <div class="stepper-wrapper">
             <div class="stepper-icon w-40px h-40px">
               <i class="ki-outline ki-check fs-2 stepper-check"></i>
@@ -32,7 +31,7 @@
           <div class="stepper-line h-40px"></div>
         </div>
 
-        <div class="stepper-item" :class="step==3 ? 'current':'' ">
+        <div class="stepper-item" :class="step==3 ? 'current':''">
           <div class="stepper-wrapper">
             <div class="stepper-icon w-40px h-40px">
               <i class="ki-outline ki-check fs-2 stepper-check"></i>
@@ -46,7 +45,7 @@
           <div class="stepper-line h-40px"></div>
         </div>
 
-        <div class="stepper-item mark-completed" :class="step==4 ? 'current':'' ">
+        <div class="stepper-item mark-completed" :class="step==4 ? 'current':''">
           <div class="stepper-wrapper">
             <div class="stepper-icon w-40px h-40px">
               <i class="ki-outline ki-check fs-2 stepper-check"></i>

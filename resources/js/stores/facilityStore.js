@@ -27,7 +27,6 @@ export const useFacilityStore = defineStore(
                 }
             }
         }
-
         const setAisleUnit = (aisle) => {
             let units = [];
             aisle.forEach(aisle => {
