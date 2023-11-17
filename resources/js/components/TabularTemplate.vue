@@ -46,7 +46,6 @@
             </div>
         </div>
     </div>
-
     <Spinner v-else />
 </template>
 

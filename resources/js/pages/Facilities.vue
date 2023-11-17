@@ -353,9 +353,7 @@ const filterFacilities = async () => {
     $('#filter-modal .btn-sm').click()
 
     processing.value = true
-
     await fetchFacilities()
-
     filter.value = true
 }
 

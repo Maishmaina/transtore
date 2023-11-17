@@ -11,12 +11,6 @@ export const useFacilityStore = defineStore(
         const stepsProgress = (position) => {
             steps.value = position;
         }
-        /*
-        Actions::
-        duplicate
-        remove
-        add price
-        */
         const setSectionAisle = (form) => {
             setOne.value = form;
             if (form.aisle != '') {
@@ -38,7 +32,12 @@ export const useFacilityStore = defineStore(
                 units = [];
             });
         }
-        return { tabState, steps, setOne, aisleListing, stepsProgress, setSectionAisle, setAisleUnit };
+        const clearDetails = () => {
+            steps.value = 1;
+            setOne.value = [];
+            aisleListing.value = [];
+        }
+        return { tabState, steps, setOne, aisleListing, stepsProgress, setSectionAisle, setAisleUnit, clearDetails };
     },
     {
         persist: true,

@@ -10,4 +10,8 @@ class Aisles extends Model
     use HasFactory;
 
     protected $fillable = ['section_id','name', 'number_of_units'];
+
+     public function section(){
+        return $this->belongsTo(Sections::class,'section_id');
+    }
 }

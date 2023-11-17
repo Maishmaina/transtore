@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('size');
             $table->string('dimension');
             $table->string('weight');
-            $table->string('price');
-            $table->string('available_status');
+            $table->decimal('price', 10, 2);
+            $table->string('available_status')->default('1')->comment('0=booked,1=available');
             $table->timestamps();
         });
     }

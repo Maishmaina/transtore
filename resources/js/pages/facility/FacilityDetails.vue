@@ -20,10 +20,10 @@
   <div v-if="currentTabState=='details'">
     <TabularTemplate
       resource="Facility"
-      :fetched-data="facilities"
+      :fetched-data="facilityDetails"
       :processing="processing"
       :filter="filter"
-      add-permission="create facilities"
+      add-permission=""
       @add-clicked="showAddModal"
       @searching="searching"
       @clear-filters="clearFilters"
@@ -35,20 +35,57 @@
         <th>Aisle Name</th>
         <th>Unit Name</th>
         <th>Unit Size</th>
-        <th>Unit Dimensions</th>
-        <th>Weight</th>
+        <th>Dimensions(CM)</th>
+        <th>Weight(KG)</th>
         <th>Price</th>
-        <th
-          class="text-end"
-        >Actions</th>
+        <th>Available</th>
+        <th>Actions</th>
       </template>
       <template #tbody>
-        <tr>
+        <template v-if="facilityDetails.data">
+          <tr v-for="(f_details,i) in facilityDetails.data">
+            <td>{{ i+1 }}</td>
+            <td>{{ f_details.aisle.section.name }}</td>
+            <td>{{ f_details.aisle.name }}</td>
+            <td>{{ f_details.name }}</td>
+            <td>{{ f_details.unit_size.name }}</td>
+            <td>{{ f_details.dimension }}</td>
+            <td>{{ f_details.weight }}</td>
+            <td>{{ f_details.price }}</td>
+            <td>
+              <span class="badge badge-light-success" v-if="f_details.available_status==1">Open</span>
+              <span class="badge badge-light-danger" v-else>Close</span>
+            </td>
+            <td >
+              <div class="d-flex">
+                <button
+                type="button"
+                  class="btn btn-sm btn-icon btn-clear btn-active-light-primary me-3"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Edit"
+                >
+                  <i class="ki-outline ki-message-edit fs-2 m-0"></i>
+                </button>
+                <button
+                type="button"
+                  class="btn btn-sm btn-icon btn-light text-danger btn-active-light-danger me-2"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="Delete"
+                >
+                  <i class="ki-outline ki-trash fs-2 m-0"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </template>
+        <tr v-else>
           <td colspan="7" class="text-center">No data available</td>
         </tr>
       </template>
       <template #pagination>
-        <Pagination :data="facilities" @pagination-change-page="fetchFacilities" :limit="5" />
+        <Pagination :data="facilityDetails" @pagination-change-page="fetchFacilityDetails" :limit="5" />
       </template>
     </TabularTemplate>
   </div>
@@ -99,7 +136,7 @@
                     Submit
                     <i class="ki-outline ki-arrow-right fs-3 ms-2 me-0"></i>
                   </span>
-                  <span v-else >
+                  <span v-else>
                     Please wait...
                     <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                   </span>
@@ -117,25 +154,32 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { toast } from "vue3-toastify";
-import axios from 'axios';
+import axios from "axios";
 import facilityUnitSteps from "@/components/facility/facility-unit-steps.vue";
 import facilityStepOne from "@/components/facility/facility-step-one.vue";
 import facilityStepTwo from "@/components/facility/facility-step-two.vue";
 import facilityStepThree from "@/components/facility/facility-step-three.vue";
 import facilityStepFour from "@/components/facility/facility-step-four.vue";
-import { useAuthStore } from '@/stores/authStore.js'
+import { useAuthStore } from "@/stores/authStore.js";
 import { useFacilityStore } from "@/stores/facilityStore.js";
-
-
 import { Bootstrap5Pagination as Pagination } from "laravel-vue-pagination";
 import TabularTemplate from "@/components/TabularTemplate.vue";
 
+const route = useRoute();
 const { config } = useAuthStore();
-const { setOne,aisleListing,tabState, steps, stepsProgress } = useFacilityStore();
+const {
+  setOne,
+  aisleListing,
+  tabState,
+  steps,
+  stepsProgress,
+  clearDetails
+} = useFacilityStore();
 
+const facilityDetails = ref([]);
 const currentTabState = ref(tabState);
 const currentPost = ref(steps);
 
@@ -149,6 +193,9 @@ const setCurrentTab = param => {
   currentTabState.value = param;
 };
 
+onMounted(() => {
+  fetchFacilityDetails();
+});
 const previous = () => {
   if (currentPost.value > 1) {
     let previous = Number(currentPost.value) - 1;
@@ -170,21 +217,21 @@ const nextStep = () => {
 };
 
 const _validate = step => {
-
-  if (step === 1){
+  if (step === 1) {
+    fetchFacilityDetails();
     let value = stepOneUI.value.stpOne;
     stepOneUI.value.submitStepOne();
-    if (value.section != "" && value.aisle != "") {
+    if (value.section  && value.aisle ) {
       return true;
     }
     return false;
-  }else if (step === 2){
+  } else if (step === 2) {
     let value = stepTwo.value.aisle.aisle;
     stepTwo.value.submitStepTwo();
     const result = !value.some(aisle => Object.values(aisle).some(i => !i));
     return result;
-  }else if (step === 3) {
-      let result = false;
+  } else if (step === 3) {
+    let result = false;
 
     let all_units = stepThree.value.aisle_unit;
     all_units.forEach(aisle_units => {
@@ -201,53 +248,63 @@ const _validate = step => {
   }
 };
 
-/*
-const submitForm = async () => {
-    errors.value = {}
-    processing.value = true
-
-    let response = null
-    try {
-        response = await axios.post('facilities', form.value, config)
-    } catch (error) {
-        response = error.response
-    }
-
-    if (response.status == 201) {
-        toast.success("Facility added successfully")
-        clearForm()
-        $('#add-modal .btn-sm').click()
-        fetchFacilities()
-    } else if (response.status == 422) {
-        toast.error("Error adding facility")
-        errors.value = response.data.errors
-
-        processing.value = false
-    }
-}
-*/
-
 const submitData = async () => {
-    processing.value = true;
-    let result = null;
+  processing.value = true;
+  let result = null;
 
-    let submit_result = ref({
-        facility:route.params.id,
-        section: setOne,
-        result_aisle: aisleListing
-    })
-    try {
-
-        result = await axios.post('units',submit_result.value,config);
-
-    } catch (error) {
-        console.error(error);
-    }
-    console.log(result);
+  let submit_result = ref({
+    facility: route.params.id,
+    section: setOne,
+    result_aisle: aisleListing
+  });
+  try {
+    result = await axios.post("units", submit_result.value, config);
+  } catch (error) {
+    processing.value = false;
+    toast.error("Unit Mapping Failed, Confirm Details and Send");
+  }
+  if (result.data.message == "success") {
+    fetchFacilityDetails();
+    clearDetails();
+    stepsProgress(1);
+    setCurrentTab("details");
+    currentPost.value = 1;
+    processing.value = false;
     toast.success("Unit Mapping done successfully");
+  } else {
+    processing.value = false;
+    toast.error("Unit Mapping Failed, Confirm Details and Send");
+  }
 };
-const route = useRoute();
-// console.log(route.params.id);
+
+
+const search = ref('')
+
+const searching = (value) => {
+    search.value = value
+}
+
+const fetchFacilityDetails = async (page = 1) => {
+  let response = null;
+  try {
+    response = await axios.get(`units`, {
+      ...config,
+        params: {
+            page,
+         search: search.value,
+        facility: route.params.id
+      }
+    });
+  } catch (error) {
+    response = error.response;
+  }
+  console.log(response);
+  if (response.status == 200) {
+    facilityDetails.value = response.data;
+  } else {
+    toast.error("Error fetching Facility Details");
+  }
+};
 </script>
 <style scoped>
 </style>
