@@ -21,7 +21,6 @@
             <th>Status</th>
             <th class="text-end" v-if="permissions.includes('view facility details') || permissions.includes('delete facilities')">Actions</th>
         </template>
-
         <template #tbody>
             <template v-if="facilities.data.length">
                 <tr v-for="(facility,i) in facilities.data">

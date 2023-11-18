@@ -100,8 +100,9 @@ class UnitsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Units $id)
     {
-        //
+        // $unit = Units::where('id',$id)->get();
+        return $this->destroyModel($id);
     }
 }

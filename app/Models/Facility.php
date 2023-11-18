@@ -33,7 +33,6 @@ class Facility extends Model
     {
         return $this->belongsTo(FacilityOwner::class, 'facility_owner_id');
     }
-
     public function storageTypes()
     {
         return $this->belongsToMany(StorageType::class);

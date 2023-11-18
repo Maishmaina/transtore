@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Units extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $fillable = ['name','aisle_id','size','dimension','weight','price','available_status'];
 
     public function aisle(){
@@ -17,7 +18,6 @@ class Units extends Model
     {
     return $this->belongsTo(UnitSize::class,'size');
     }
-
       public function scopeSearch($query, $keyword)
     {
         return $query->where(function ($query) use ($keyword) {

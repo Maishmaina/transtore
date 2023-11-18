@@ -68,7 +68,9 @@
                   <i class="ki-outline ki-message-edit fs-2 m-0"></i>
                 </button>
                 <button
-                type="button"
+                  :disabled="f_details.available_status==0"
+                  @click="deleteUnit(f_details.id)" v-if="permissions.includes('delete facilities')"
+                  type="button"
                   class="btn btn-sm btn-icon btn-light text-danger btn-active-light-danger me-2"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
@@ -154,10 +156,11 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted,watch } from "vue";
 import { useRoute } from "vue-router";
 import { toast } from "vue3-toastify";
 import axios from "axios";
+import throttle from 'lodash/throttle'
 import facilityUnitSteps from "@/components/facility/facility-unit-steps.vue";
 import facilityStepOne from "@/components/facility/facility-step-one.vue";
 import facilityStepTwo from "@/components/facility/facility-step-two.vue";
@@ -169,7 +172,7 @@ import { Bootstrap5Pagination as Pagination } from "laravel-vue-pagination";
 import TabularTemplate from "@/components/TabularTemplate.vue";
 
 const route = useRoute();
-const { config } = useAuthStore();
+const { config,permissions } = useAuthStore();
 const {
   setOne,
   aisleListing,
@@ -282,6 +285,7 @@ const search = ref('')
 
 const searching = (value) => {
     search.value = value
+    console.log(value);
 }
 
 const fetchFacilityDetails = async (page = 1) => {
@@ -298,13 +302,51 @@ const fetchFacilityDetails = async (page = 1) => {
   } catch (error) {
     response = error.response;
   }
-  console.log(response);
   if (response.status == 200) {
     facilityDetails.value = response.data;
   } else {
     toast.error("Error fetching Facility Details");
   }
 };
+
+watch(() => search.value, throttle(() => {
+    fetchFacilityDetails()
+}, 600))
+
+//delete
+const deleteUnit = (id) => {
+        Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            let response = null
+            try {
+                response = await axios.delete(`units/${id}`, config)
+            } catch (error) {
+                response = error.response
+                toast.error("Error deleting facility")
+            }
+            console.log(response);
+            if (response.status == 200){
+                Swal.fire(
+                    'Deleted!',
+                    'Unit has been deleted.',
+                    'success'
+                )
+                processing.value = true
+                fetchFacilityDetails()
+            }
+        }
+    })
+
+}
+
 </script>
 <style scoped>
 </style>
