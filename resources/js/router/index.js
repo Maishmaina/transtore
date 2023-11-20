@@ -22,6 +22,10 @@ import ResetPassword from "@/pages/ResetPassword.vue";
 
 import NotFound from "@/pages/NotFound.vue";
 
+//USER ROUTES
+import UserAuth from "@/components/user/UserAuth.vue";
+import UserLogin from "@/pages/user/Login.vue";
+
 const checkGuest = (to, from) => {
     const { authUser } = useAuthStore();
 
@@ -33,12 +37,11 @@ const checkGuest = (to, from) => {
         return true;
     }
 };
-
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
-            path: "/",
+            path: "/admin",
             component: Main,
             children: [
                 {
@@ -51,7 +54,7 @@ const router = createRouter({
                     },
                 },
                 {
-                    path: "/user-management",
+                    path: "/admin/user-management",
                     children: [
                         {
                             path: "customers",
@@ -76,7 +79,7 @@ const router = createRouter({
                     ],
                 },
                 {
-                    path: "/facilities",
+                    path: "/admin/facilities",
                     children: [
                         {
                             path: "facility-owners",
@@ -111,7 +114,7 @@ const router = createRouter({
                     ],
                 },
                 {
-                    path: "/globals",
+                    path: "/admin/globals",
                     children: [
                         {
                             path: "roles-and-permissions",
@@ -138,7 +141,7 @@ const router = createRouter({
             ],
         },
         {
-            path: "/auth",
+            path: "/admin/auth",
             component: Auth,
             children: [
                 {
@@ -161,11 +164,24 @@ const router = createRouter({
                 },
             ],
         },
+
         {
             path: "/:pathMatch(.*)*",
             name: "NotFound",
             component: NotFound,
         },
+        {
+            // user routes
+            path: "/auth",
+            component: UserAuth,
+            children: [
+                {
+                    path: "user_login",
+                    name: "user_login",
+                    component: UserLogin,
+                },
+            ],
+        }
     ],
 });
 
@@ -177,12 +193,10 @@ router.beforeEach((to, from) => {
             name: "login",
         };
     }
-
     if (to.meta.permission && !permissions.includes(to.meta.permission)) {
         return {
             name: "home",
         };
     }
 });
-
 export default router;

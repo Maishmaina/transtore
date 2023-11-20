@@ -23,7 +23,7 @@
       :fetched-data="facilityDetails"
       :processing="processing"
       :filter="filter"
-      add-permission=""
+      add-permission
       @add-clicked="showAddModal"
       @searching="searching"
       @clear-filters="clearFilters"
@@ -56,10 +56,11 @@
               <span class="badge badge-light-success" v-if="f_details.available_status==1">Open</span>
               <span class="badge badge-light-danger" v-else>Close</span>
             </td>
-            <td >
+            <td>
               <div class="d-flex">
                 <button
-                type="button"
+                  type="button"
+                  @click="editUnitDetails(f_details)"
                   class="btn btn-sm btn-icon btn-clear btn-active-light-primary me-3"
                   data-bs-toggle="tooltip"
                   data-bs-placement="top"
@@ -69,7 +70,8 @@
                 </button>
                 <button
                   :disabled="f_details.available_status==0"
-                  @click="deleteUnit(f_details.id)" v-if="permissions.includes('delete facilities')"
+                  @click="deleteUnit(f_details.id)"
+                  v-if="permissions.includes('delete facilities')"
                   type="button"
                   class="btn btn-sm btn-icon btn-light text-danger btn-active-light-danger me-2"
                   data-bs-toggle="tooltip"
@@ -87,9 +89,90 @@
         </tr>
       </template>
       <template #pagination>
-        <Pagination :data="facilityDetails" @pagination-change-page="fetchFacilityDetails" :limit="5" />
+        <Pagination
+          :data="facilityDetails"
+          @pagination-change-page="fetchFacilityDetails"
+          :limit="5"
+        />
       </template>
     </TabularTemplate>
+
+    <Modal id="unit-details-modal" :title="`Edit Unit Details`">
+      <template #modal-body>
+        <div class="d-flex flex-column mb-8 fv-row">
+          <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+            <span class="required">Unit Name</span>
+            <span
+              class="ms-1"
+              data-bs-toggle="tooltip"
+              title="Specify a target name for future usage and reference"
+            ></span>
+          </label>
+          <input type="text" class="form-control" placeholder="Unit Name" v-model="form.name" />
+        </div>
+        <div class="fv-row mb-5">
+          <label class="required fs-6 fw-semibold mb-2">Assign</label>
+          <select class="form-select" id="target_assign" v-model="form.size">
+            <option value>Select Size...</option>
+            <option value="1">Small</option>
+            <option value="2">Medium</option>
+            <option value="3">Large</option>
+          </select>
+        </div>
+        <div class="d-flex flex-column mb-8 fv-row">
+          <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+            <span class="required">Dimension</span>
+            <span
+              class="ms-1"
+              data-bs-toggle="tooltip"
+              title="Specify a target name for future usage and reference"
+            ></span>
+          </label>
+          <input type="text" class="form-control" placeholder="5*5*2" v-model="form.dimension" />
+        </div>
+        <div class="d-flex flex-column mb-8 fv-row">
+          <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+            <span class="required">Weight</span>
+            <span
+              class="ms-1"
+              data-bs-toggle="tooltip"
+              title="Specify a target name for future usage and reference"
+            ></span>
+          </label>
+          <input type="number" class="form-control" placeholder="Unit Weight" v-model="form.weight" />
+        </div>
+        <div class="d-flex flex-column mb-8 fv-row">
+          <label class="d-flex align-items-center fs-6 fw-semibold mb-2">
+            <span class="required">Price</span>
+            <span
+              class="ms-1"
+              data-bs-toggle="tooltip"
+              title="Specify a target name for future usage and reference"
+            ></span>
+          </label>
+          <input type="number" class="form-control" placeholder="Unit Price" v-model="form.price" />
+        </div>
+        <label class="form-check form-switch form-check-custom form-check-solid">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            v-model="form.availability"
+            :checked="form.availability=='true' ? 'checked':''"
+          />
+          <span class="form-check-label fw-semibold text-muted">Available</span>
+        </label>
+      </template>
+
+      <template #modal-footer>
+        <button type="button" class="btn btn-primary" @click="submitUnitEdit" :disabled="processing">
+          <span class="indicator-label" v-if="!processing">Submit</span>
+          <span class="indicator-progress d-block" v-else>
+            Please wait...
+            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+          </span>
+        </button>
+      </template>
+    </Modal>
   </div>
   <div v-else>
     <div>
@@ -156,11 +239,11 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted,watch } from "vue";
+import { ref, onMounted, watch, reactive } from "vue";
 import { useRoute } from "vue-router";
 import { toast } from "vue3-toastify";
 import axios from "axios";
-import throttle from 'lodash/throttle'
+import throttle from "lodash/throttle";
 import facilityUnitSteps from "@/components/facility/facility-unit-steps.vue";
 import facilityStepOne from "@/components/facility/facility-step-one.vue";
 import facilityStepTwo from "@/components/facility/facility-step-two.vue";
@@ -170,9 +253,10 @@ import { useAuthStore } from "@/stores/authStore.js";
 import { useFacilityStore } from "@/stores/facilityStore.js";
 import { Bootstrap5Pagination as Pagination } from "laravel-vue-pagination";
 import TabularTemplate from "@/components/TabularTemplate.vue";
+import Modal from "@/components/Modal.vue";
 
 const route = useRoute();
-const { config,permissions } = useAuthStore();
+const { config, permissions } = useAuthStore();
 const {
   setOne,
   aisleListing,
@@ -181,7 +265,14 @@ const {
   stepsProgress,
   clearDetails
 } = useFacilityStore();
-
+const form = reactive({
+  id: "",
+  name: "",
+  size: "",
+  dimension: "",
+  weight: "",
+  availability: ""
+});
 const facilityDetails = ref([]);
 const currentTabState = ref(tabState);
 const currentPost = ref(steps);
@@ -224,7 +315,7 @@ const _validate = step => {
     fetchFacilityDetails();
     let value = stepOneUI.value.stpOne;
     stepOneUI.value.submitStepOne();
-    if (value.section  && value.aisle ) {
+    if (value.section && value.aisle) {
       return true;
     }
     return false;
@@ -280,22 +371,20 @@ const submitData = async () => {
   }
 };
 
+const search = ref("");
 
-const search = ref('')
-
-const searching = (value) => {
-    search.value = value
-    console.log(value);
-}
+const searching = value => {
+  search.value = value;
+};
 
 const fetchFacilityDetails = async (page = 1) => {
   let response = null;
   try {
     response = await axios.get(`units`, {
       ...config,
-        params: {
-            page,
-         search: search.value,
+      params: {
+        page,
+        search: search.value,
         facility: route.params.id
       }
     });
@@ -309,44 +398,88 @@ const fetchFacilityDetails = async (page = 1) => {
   }
 };
 
-watch(() => search.value, throttle(() => {
-    fetchFacilityDetails()
-}, 600))
+watch(
+  () => search.value,
+  throttle(() => {
+    fetchFacilityDetails();
+  }, 600)
+);
 
 //delete
-const deleteUnit = (id) => {
-        Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then(async (result) => {
-        if (result.isConfirmed) {
-            let response = null
-            try {
-                response = await axios.delete(`units/${id}`, config)
-            } catch (error) {
-                response = error.response
-                toast.error("Error deleting facility")
-            }
-            console.log(response);
-            if (response.status == 200){
-                Swal.fire(
-                    'Deleted!',
-                    'Unit has been deleted.',
-                    'success'
-                )
-                processing.value = true
-                fetchFacilityDetails()
-            }
-        }
-    })
+const deleteUnit = id => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!"
+  }).then(async result => {
+    if (result.isConfirmed) {
+      let response = null;
+      try {
+        response = await axios.delete(`units/${id}`, config);
+      } catch (error) {
+        response = error.response;
+        toast.error("Error deleting facility");
+      }
 
-}
+      if (response.status == 200) {
+        Swal.fire("Deleted!", "Unit has been deleted.", "success");
+        processing.value = false;
+        fetchFacilityDetails();
+      }
+    }
+  });
+};
 
+//edit unit details
+
+const editUnitDetails = unit => {
+  form.id = unit.id;
+  form.name = unit.name;
+  form.size = unit.size;
+  form.dimension = unit.dimension;
+  form.weight = unit.weight;
+  form.price = unit.price;
+  form.availability = unit.available_status == "1" ? true : false;
+
+  $("#unit-details-modal").modal("show");
+};
+const submitUnitEdit = async () => {
+  if (
+    form.name == "" ||
+    form.size == "" ||
+    form.dimension == "" ||
+    form.weight == "" ||
+    form.price == ""
+  ) {
+    toast.error("Error, Empty Field Not Allowed");
+  } else {
+    processing.value = true;
+    let result;
+      try {
+      result = await axios.patch(
+        `units/${form.id}`,
+        form,
+        config
+      );
+      processing.value = false;
+    } catch (error) {
+          result = error.response;
+         processing.value = false;
+      }
+      if (result.status == 200){
+          console.log(result);
+          toast.success("Unit Updated Successfully")
+          fetchFacilityDetails();
+           $('#unit-details-modal .btn-sm').click()
+      } else{
+          toast.error("Error, Something wrong happened try again");
+      }
+  }
+};
 </script>
 <style scoped>
 </style>

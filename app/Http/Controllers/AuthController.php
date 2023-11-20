@@ -66,7 +66,6 @@ class AuthController extends Controller
             ]);
 
             Mail::to($user->email)->send(new Welcome($user));
-
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();

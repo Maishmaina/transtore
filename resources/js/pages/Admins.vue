@@ -26,7 +26,7 @@
                     <td>{{ admin.full_name }}</td>
                     <td>{{ admin.phone_number }}</td>
                     <td>{{ admin.email }}</td>
-                    <td>{{ admin.roles[0].name }}</td>
+                    <td>{{ !admin.roles ? admin.roles[0].name : '' }}</td>
                     <td>{{ moment(admin.created_at).format('MMMM Do YYYY') }}</td>
                     <td>
                         <span class="badge badge-light-success" v-if="admin.enabled">Enabled</span>

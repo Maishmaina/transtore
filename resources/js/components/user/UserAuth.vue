@@ -6,7 +6,7 @@
                     <div class="mb-7">
                         <img alt="Logo" src="/assets/media/logos/custom-3.svg" />
                     </div>
-                    <h2 class="text-white fw-normal m-0">Welcome Back Admin?</h2>
+                    <h2 class="text-white fw-normal m-0">Welcome Back Customer?</h2>
                 </div>
             </div>
             <div class="d-flex flex-column-fluid flex-lg-row-auto justify-content-center justify-content-lg-end p-12 p-lg-20">

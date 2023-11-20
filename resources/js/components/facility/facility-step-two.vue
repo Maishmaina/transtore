@@ -46,7 +46,7 @@
                     <input
                     type="text"
                     class="form-control"
-                    v-model="aisle.name" />
+                    v-model="aisle.name"/>
                   </td>
                   <td>
                     <input
@@ -112,11 +112,11 @@ const aisle = ref({
 });
 
 const submitStepTwo = () => {
-
     setAisleUnit(aisle.value.aisle);
-
 };
+
 const duplicate = (asl) => {
+
     let items = aisle.value.aisle;
     let index = items.indexOf(asl);
     let newIndex = index + 1;

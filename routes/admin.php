@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\UnitsController;
+use App\Http\Controllers\Admin\UnitsController;
+use App\Http\Controllers\Admin\UnitSizeController;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\FacilityController;
@@ -50,5 +51,8 @@ Route::prefix('admin')->group(function () {
 
         // UNITS ROUTES
         Route::apiResource('units', UnitsController::class);
+
+        //UNIT SIZE
+        Route::apiResource('unit-size',UnitSizeController::class);
     });
 });

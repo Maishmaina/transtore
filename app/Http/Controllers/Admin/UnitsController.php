@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Aisles;
 use App\Models\Sections;
 use App\Models\Units;
@@ -92,17 +93,32 @@ class UnitsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Units $unit)
     {
-        //
+        try {
+            $unit->update([
+                'name'=>$request->name,
+                'size'=>$request->size,
+                'dimension'=>$request->dimension,
+                'weight'=>$request->weight,
+                'price'=>$request->price,
+                'available_status'=>$request->availability==false ? 0 : 1
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'message' => 'Failed to update Unit'
+            ], 500);
+        }
+        return response()->json([
+            'message' => 'Unit updated successfully'
+        ],200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Units $id)
+    public function destroy(Units $unit)
     {
-        // $unit = Units::where('id',$id)->get();
-        return $this->destroyModel($id);
+         return $this->destroyModel($unit);
     }
 }
