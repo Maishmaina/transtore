@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
+import { useUserStore } from "@/stores/userStore";
 
 // PARENT COMPONENTS
 import Auth from "@/components/Auth.vue";
@@ -28,13 +29,16 @@ import UserLogin from "@/pages/user/Login.vue";
 
 const checkGuest = (to, from) => {
     const { authUser } = useAuthStore();
+    const { user } = useUserStore();
 
     if (authUser) {
         return {
             name: "home",
         };
     } else {
+
         return true;
+
     }
 };
 const router = createRouter({
@@ -145,8 +149,8 @@ const router = createRouter({
             component: Auth,
             children: [
                 {
-                    path: "login",
-                    name: "login",
+                    path: "admin_login",
+                    name: "admin_login",
                     component: Login,
                     beforeEnter: checkGuest,
                 },
@@ -164,7 +168,6 @@ const router = createRouter({
                 },
             ],
         },
-
         {
             path: "/:pathMatch(.*)*",
             name: "NotFound",
@@ -172,20 +175,37 @@ const router = createRouter({
         },
         {
             // user routes
-            path: "/auth",
+            path: "/",
             component: UserAuth,
             children: [
                 {
-                    path: "user_login",
-                    name: "user_login",
+                    path: "login",
+                    name: "login",
                     component: UserLogin,
                 },
+                {
+                    path: "register",
+                    name: "register",
+                    component: UserLogin,
+                },
+                {
+                    path: "forgot-password",
+                    name: "forgot-password",
+                    component: UserLogin,
+                },
+                {
+                    path: "reset-password",
+                    name: "reset-password",
+                    component: UserLogin,
+                }
+
             ],
         }
     ],
 });
 
 router.beforeEach((to, from) => {
+
     const { authUser, permissions } = useAuthStore();
 
     if (to.meta.requiresAuth && !authUser) {
@@ -194,9 +214,12 @@ router.beforeEach((to, from) => {
         };
     }
     if (to.meta.permission && !permissions.includes(to.meta.permission)) {
+
         return {
             name: "home",
         };
     }
+
 });
+
 export default router;

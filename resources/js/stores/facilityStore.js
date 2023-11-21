@@ -16,11 +16,13 @@ export const useFacilityStore = defineStore(
             if (form.aisle != '') {
                 aisleListing.value = [];
                 for (let i = 1; i <= form.aisle; i++) {
-                    let item = { name: 'Aisle ' + i, units: '', size: '', dimension: '', weight: '', price: '' }
+                    const _id_rad = parseInt(Date.now() * Math.random());
+                    let item = { _id: _id_rad, name: 'Aisle ' + i, units: '', size: '', dimension: '', weight: '', price: '' }
                     aisleListing.value.push(item);
                 }
             }
         }
+
         const setAisleUnit = (aisle) => {
             let units = [];
             aisle.forEach(aisle => {
@@ -32,11 +34,13 @@ export const useFacilityStore = defineStore(
                 units = [];
             });
         }
+
         const clearDetails = () => {
             steps.value = 1;
             setOne.value = [];
             aisleListing.value = [];
         }
+
         return { tabState, steps, setOne, aisleListing, stepsProgress, setSectionAisle, setAisleUnit, clearDetails };
     },
     {

@@ -41,7 +41,7 @@
                 </tr>
               </thead>
               <tbody class="fw-semibold text-gray-600">
-                <tr v-for="(aisle,i) in aisle.aisle" :key="i">
+                <tr v-for="(aisle) in aisle.aisle" :key="aisle._id">
                   <td>
                     <input
                     type="text"
@@ -115,19 +115,25 @@ const submitStepTwo = () => {
     setAisleUnit(aisle.value.aisle);
 };
 
-const duplicate = (asl) => {
+const duplicate = (asl) =>{
 
     let items = aisle.value.aisle;
+    let new_id = parseInt(Date.now() * Math.random());
+    let new_item = { _id: new_id, name: asl.name, units: asl.units, size: asl.size, dimension: asl.dimension, weight: asl.weight, price:asl.price };
+
     let index = items.indexOf(asl);
     let newIndex = index + 1;
-    items.splice(newIndex, 0, asl);
+    items.splice(newIndex, 0, new_item);
 
 }
+
 const remove = (asl) => {
+
     let items = aisle.value.aisle;
     let index = items.indexOf(asl);
     if (index !== -1) {
     items.splice(index, 1);
+
 }
 
 }
@@ -136,6 +142,7 @@ defineExpose({
   submitStepTwo,
   aisle
 });
+
 </script>
 <style scoped>
 </style>

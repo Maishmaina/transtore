@@ -67,7 +67,7 @@ const submitForm = async () => {
 
     if (response.status == 200) {
         // router.push({name: 'home'})
-        window.location.href = '/'
+        window.location.href = '/admin'
     } else {
         let error = response.data
         toast.error(error.message)
