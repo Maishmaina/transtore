@@ -32,23 +32,17 @@
           <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
         </span>
       </button>
-      <router-link :to="{ name: 'admin_login' }" class="btn btn-light"
-        >Cancel</router-link
-      >
+      <router-link :to="{ name: 'verify-user' }" class="btn btn-light">Sign In</router-link>
     </div>
   </form>
 </template>
-
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { toast } from "vue3-toastify";
-
 const router = useRouter();
-
 const errors = ref({});
 const processing = ref(false);
-
 const form = ref({
   email: "",
 });
@@ -63,18 +57,16 @@ const submitForm = async () => {
   } catch (error) {
     response = error.response;
     error = response.data;
-
     toast.error(error.message);
     errors.value = error.errors ?? {};
   }
 
   processing.value = false;
-
   if (response.status == 200) {
-    router.push({ name: "admin_reset-password" });
+    router.push({ name: "reset-password" });
   }
+
 };
 
 </script>
-
 <style scoped></style>

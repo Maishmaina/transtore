@@ -26,8 +26,13 @@ import NotFound from "@/pages/NotFound.vue";
 //USER ROUTES
 import UserAuth from "@/components/user/UserAuth.vue";
 import UserLogin from "@/pages/user/Login.vue";
+import UserRegister from "@/pages/user/Register.vue";
+import UserForgotPassword from "@/pages/user/ForgotPassword.vue";
+import VerifyUserAccount from "@/pages/user/VerifyUserAccount.vue"
+import UserSetPassword from "@/pages/user/ResetPassword.vue";
 
 const checkGuest = (to, from) => {
+
     const { authUser } = useAuthStore();
     const { user } = useUserStore();
 
@@ -36,11 +41,11 @@ const checkGuest = (to, from) => {
             name: "home",
         };
     } else {
-
         return true;
-
     }
+
 };
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -49,7 +54,7 @@ const router = createRouter({
             component: Main,
             children: [
                 {
-                    path: "",
+                    path: "/admin",
                     name: "home",
                     component: Home,
                     meta: {
@@ -155,14 +160,14 @@ const router = createRouter({
                     beforeEnter: checkGuest,
                 },
                 {
-                    path: "forgot-password",
-                    name: "forgot-password",
+                    path: "admin_forgot-password",
+                    name: "admin_forgot-password",
                     component: ForgotPassword,
                     beforeEnter: checkGuest,
                 },
                 {
-                    path: "reset-password",
-                    name: "reset-password",
+                    path: "admin_reset-password",
+                    name: "admin_reset-password",
                     component: ResetPassword,
                     beforeEnter: checkGuest,
                 },
@@ -174,7 +179,7 @@ const router = createRouter({
             component: NotFound,
         },
         {
-            // user routes
+            // user auth routes
             path: "/",
             component: UserAuth,
             children: [
@@ -182,28 +187,49 @@ const router = createRouter({
                     path: "login",
                     name: "login",
                     component: UserLogin,
+                    beforeEnter: checkGuest,
                 },
                 {
                     path: "register",
                     name: "register",
-                    component: UserLogin,
+                    component: UserRegister,
+                    beforeEnter: checkGuest,
                 },
                 {
                     path: "forgot-password",
                     name: "forgot-password",
-                    component: UserLogin,
+                    component: UserForgotPassword,
+                    beforeEnter: checkGuest,
                 },
                 {
                     path: "reset-password",
                     name: "reset-password",
-                    component: UserLogin,
+                    component: UserSetPassword,
+                    beforeEnter: checkGuest,
+                },
+                {
+                    path: 'verify-user',
+                    name: 'verify-user',
+                    component: VerifyUserAccount,
+                    beforeEnter: checkGuest,
                 }
 
             ],
+        },
+        //authorized user/customer routes
+        {
+            path: "/",
+            component: UserAuth,
+            children: [
+                {
+                    path: "/facility",
+                    name: "facility",
+                    component: UserLogin,
+                },
+            ]
         }
     ],
 });
-
 router.beforeEach((to, from) => {
 
     const { authUser, permissions } = useAuthStore();

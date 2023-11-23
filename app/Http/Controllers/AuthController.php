@@ -49,7 +49,7 @@ class AuthController extends Controller
     public function register(UserRequest $request)
     {
         $request->validate([
-            'password' => 'required'
+            'password' => 'required|min:8|confirmed'
         ]);
 
         $verificationCode = $this->generateCode('verification_code');
