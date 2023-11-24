@@ -44,17 +44,17 @@
             <Pagination :data="roles" @pagination-change-page="fetchRoles" :limit="5" />
         </template>
     </TabularTemplate>
-    
+
     <Modal id="role-modal" :title="`${editRole ? 'Edit ' : 'Add '} Role`">
         <template #modal-body>
             <div class="form-group">
                 <label for="name" class="required form-label">Name</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.name}"
-                    id="name" 
-                    placeholder="Enter name" 
-                    v-model="form.name" 
+                    id="name"
+                    placeholder="Enter name"
+                    v-model="form.name"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.name">
@@ -126,11 +126,11 @@ const roles = ref([])
 const fetchRoles = async (page = 1) => {
     let response = null
     try {
-        response = await axios.get(`roles?page=${page}`, config)
+        response = await axios.get(`admin/roles?page=${page}`, config)
     } catch (error) {
         response = error.response
     }
-    
+
     if (response.status == 200) {
         roles.value = response.data
         processing.value = false
@@ -144,7 +144,7 @@ const allPermissions = ref([])
 onMounted(() => {
     fetchRoles()
 
-    axios.get('permissions', config)
+    axios.get('admin/permissions', config)
         .then(response => {
             allPermissions.value = response.data
         })
@@ -182,20 +182,20 @@ const showEditModal = (role) => {
     editRole.value = true
     roleId.value = role.id
     form.value.name = role.name
-    
+
     $('#role-modal').modal('show')
 }
 
 const submitForm = async () => {
     errors.value = {}
     processing.value = true
-    
+
     let response = null
     try {
         if (editRole.value) {
-            response = await axios.patch(`roles/${roleId.value}`, form.value, config)
+            response = await axios.patch(`admin/roles/${roleId.value}`, form.value, config)
         } else {
-            response = await axios.post('roles', form.value, config)
+            response = await axios.post('admin/roles', form.value, config)
         }
     } catch (error) {
         response = error.response
@@ -211,7 +211,7 @@ const submitForm = async () => {
         errors.value = response.data.errors
         processing.value = false
     }
-    
+
     if ([200, 201].includes(response.status)) {
         $('#role-modal .btn-sm').click()
         clearForm()
@@ -231,7 +231,7 @@ const showPermissionsModal = (role) => {
     })
 
     currentRole.value = role
-    
+
     $('#permissions-modal').modal('show')
 }
 
@@ -243,12 +243,12 @@ const syncPermissions = () => {
 
     processing.value = true
 
-    axios.post('sync-permissions', data, config)
+    axios.post('admin/sync-permissions', data, config)
         .then(() => {
             toast.success('Permissions synced successfully')
-            
+
             fetchRoles()
-            
+
             $('#permissions-modal .btn-sm').click()
             permissions.value = []
             currentRole.value = {}
@@ -273,7 +273,7 @@ const deleteRole = (id) => {
         if (result.isConfirmed) {
             let response = null
             try {
-                response = await axios.delete(`roles/${id}`, config)
+                response = await axios.delete(`admin/roles/${id}`, config)
             } catch (error) {
                 response = error.response
             }

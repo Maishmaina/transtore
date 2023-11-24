@@ -1,5 +1,8 @@
 <template>
-  <form class="form w-100" novalidate="novalidate" id="kt_sign_in_form">
+  <form class="form w-100"
+   id="kt_sign_in_form"
+   @submit.prevent="submitForm"
+   >
     <div class="text-center mb-11">
       <h1 class="text-dark fw-bolder mb-3">Sign In</h1>
 
@@ -13,16 +16,14 @@
         name="email"
         autocomplete="off"
         class="form-control bg-transparent"
+        v-model="form.email"
+        :class="{'is-invalid': errors.email}"
       />
+       <div class="invalid-feedback" v-if="errors.email">{{ errors.email[0] }}</div>
+
     </div>
     <div class="fv-row mb-3">
-      <input
-        type="password"
-        placeholder="Password"
-        name="password"
-        autocomplete="off"
-        class="form-control bg-transparent"
-      />
+      <PasswordInput :errors="errors" @input-changed="form.password = $event" />
     </div>
     <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
       <div></div>
@@ -33,9 +34,14 @@
       >
     </div>
     <div class="d-grid mb-10">
-      <button type="submit" id="kt_sign_in_submit" class="btn btn-primary">
-        <span class="indicator-label">Sign In</span>
-        <span class="indicator-progress"
+      <button
+      type="submit"
+      class="btn btn-primary"
+      @submit.prevent="submitForm"
+      >
+        <span v-if="!processing" class="indicator-label">Sign In</span>
+        <span
+        v-else
           >Please wait...
           <span class="spinner-border spinner-border-sm align-middle ms-2"></span
         ></span>
@@ -51,17 +57,14 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useAuthStore } from "@/stores/authStore";
+import { useUserStore } from "@/stores/userStore";
 import { toast } from "vue3-toastify";
 import PasswordInput from "@/components/PasswordInput.vue";
 
+
 const route = useRoute();
 const router = useRouter();
-let { login } = useAuthStore();
-
-if (route.query.password_changed) {
-  toast.success("Password changed successfully. Please login.");
-}
+let { loginUser } = useUserStore();
 
 const form = ref({
   email: "",
@@ -77,7 +80,7 @@ const submitForm = async () => {
 
   processing.value = true;
 
-  let response = await login(form.value);
+  let response = await loginUser(form.value);
 
   processing.value = false;
 
@@ -91,5 +94,4 @@ const submitForm = async () => {
   }
 };
 </script>
-
 <style scoped></style>

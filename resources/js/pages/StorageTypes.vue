@@ -36,17 +36,17 @@
             <Pagination :data="storageTypes" @pagination-change-page="fetchStorageTypes" :limit="5" />
         </template>
     </TabularTemplate>
-    
+
     <Modal id="storage-types-modal" :title="`${editStorageType ? 'Edit ' : 'Add '} Storage Type`">
         <template #modal-body>
             <div class="form-group">
                 <label for="name" class="required form-label">Name</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.name}"
-                    id="name" 
-                    placeholder="Enter name" 
-                    v-model="form.name" 
+                    id="name"
+                    placeholder="Enter name"
+                    v-model="form.name"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.name">
@@ -56,7 +56,7 @@
             <template v-if="editStorageType">
                 <div>
                     <p class="mt-8 mb-2 fw-semibold fs-5">Subtypes</p>
-                    
+
                     <table class="table table-row-bordered">
                         <tbody>
                             <tr v-for="storageSubtype in storageSubtypes">
@@ -72,13 +72,13 @@
                             </tr>
                         </tbody>
                     </table>
-                    
+
                     <div class="input-group input-group-sm mb-5" v-if="!editingStorageSubtype">
                         <input type="text" class="form-control" placeholder="Add subtype" :readonly="processingStorageSubtype" v-model="storageSubtype"/>
-                        <button 
-                            type="button" 
-                            class="input-group-text btn btn-primary btn-sm" 
-                            :disabled="processingStorageSubtype || !storageSubtype" 
+                        <button
+                            type="button"
+                            class="input-group-text btn btn-primary btn-sm"
+                            :disabled="processingStorageSubtype || !storageSubtype"
                             @click="addStorageSubtype"
                         >
                             Add
@@ -87,10 +87,10 @@
                     <template v-else>
                         <div class="input-group input-group-sm mb-2">
                             <input type="text" class="form-control" placeholder="Edit subtype" :readonly="processingStorageSubtype" v-model="storageSubtype"/>
-                            <button 
-                                type="button" 
-                                class="input-group-text btn btn-primary btn-sm" 
-                                :disabled="processingStorageSubtype || !storageSubtype" 
+                            <button
+                                type="button"
+                                class="input-group-text btn btn-primary btn-sm"
+                                :disabled="processingStorageSubtype || !storageSubtype"
                                 @click="updateStorageSubtype"
                             >
                                 Edit
@@ -137,11 +137,11 @@ const storageTypes = ref([])
 const fetchStorageTypes = async (page = 1) => {
     let response = null
     try {
-        response = await axios.get(`storage-types?page=${page}`, config)
+        response = await axios.get(`admin/storage-types?page=${page}`, config)
     } catch (error) {
         response = error.response
     }
-    
+
     if (response.status == 200) {
         storageTypes.value = response.data
         processing.value = false
@@ -184,20 +184,20 @@ const showEditModal = (storageType) => {
     storageTypeId.value = storageType.id
     storageSubtypes.value = storageType.subtypes
     form.value.name = storageType.name
-    
+
     $('#storage-types-modal').modal('show')
 }
 
 const submitForm = async () => {
     errors.value = {}
     processing.value = true
-    
+
     let response = null
     try {
         if (editStorageType.value) {
-            response = await axios.patch(`storage-types/${storageTypeId.value}`, form.value, config)
+            response = await axios.patch(`admin/storage-types/${storageTypeId.value}`, form.value, config)
         } else {
-            response = await axios.post('storage-types', form.value, config)
+            response = await axios.post('admin/storage-types', form.value, config)
         }
     } catch (error) {
         response = error.response
@@ -213,7 +213,7 @@ const submitForm = async () => {
         errors.value = response.data.errors
         processing.value = false
     }
-    
+
     if ([200, 201].includes(response.status)) {
         $('#storage-types-modal .btn-sm').click()
         clearForm()
@@ -234,7 +234,7 @@ const deleteStorageType = (id) => {
         if (result.isConfirmed) {
             let response = null
             try {
-                response = await axios.delete(`storage-types/${id}`, config)
+                response = await axios.delete(`admin/storage-types/${id}`, config)
             } catch (error) {
                 response = error.response
                 toast.error(response.data.message)
@@ -263,7 +263,7 @@ const addStorageSubtype = async () => {
 
     let response = null
     try {
-        response = await axios.post('storage-subtypes', {
+        response = await axios.post('admin/storage-subtypes', {
             storage_type_id: storageTypeId.value,
             name: storageSubtype.value
         }, config)
@@ -274,13 +274,13 @@ const addStorageSubtype = async () => {
 
     if (response.status == 201) {
         fetchStorageTypes()
-        
+
         storageSubtype.value = ''
         storageSubtypes.value.push(response.data)
-        
+
         toast.success('Storage subtype added successfully')
     }
-    
+
     processingStorageSubtype.value = false
 }
 
@@ -305,7 +305,7 @@ const updateStorageSubtype = async () => {
 
     let response = null
     try {
-        response = await axios.patch(`storage-subtypes/${storageSubtypeId.value}`, {
+        response = await axios.patch(`admin/storage-subtypes/${storageSubtypeId.value}`, {
             name: storageSubtype.value
         }, config)
     } catch (error) {
@@ -315,15 +315,15 @@ const updateStorageSubtype = async () => {
 
     if (response.status == 200) {
         fetchStorageTypes()
-        
+
         storageSubtypes.value.find(subtype => subtype.id == storageSubtypeId.value).name = storageSubtype.value
         storageSubtype.value = ''
         storageSubtypeId.value = ''
         editingStorageSubtype.value = false
-        
+
         toast.success('Storage subtype updated successfully')
     }
-    
+
     processingStorageSubtype.value = false
 }
 
@@ -340,7 +340,7 @@ const deleteStorageSubtype = (id) => {
         if (result.isConfirmed) {
             let response = null
             try {
-                response = await axios.delete(`storage-subtypes/${id}`, config)
+                response = await axios.delete(`admin/storage-subtypes/${id}`, config)
             } catch (error) {
                 response = error.response
                 toast.error(response.data.message)

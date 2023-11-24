@@ -3,7 +3,7 @@
     <div class="text-center mb-10">
       <h1 class="text-dark fw-bolder mb-3">Forgot Password ?</h1>
       <div class="text-gray-500 fw-semibold fs-6">
-        Enter your email to reset your password.
+        Enter your email to reset your password, reset code will been sent to this Email.
       </div>
     </div>
     <div class="fv-row mb-8">
@@ -18,7 +18,9 @@
       <div class="invalid-feedback" v-if="errors.email">
         {{ errors.email[0] }}
       </div>
+
     </div>
+
     <div class="d-flex flex-wrap justify-content-center pb-lg-0">
       <button
         type="submit"
@@ -46,14 +48,14 @@ const processing = ref(false);
 const form = ref({
   email: "",
 });
-
 const submitForm = async () => {
   errors.value = {};
   processing.value = true;
 
   let response = null;
   try {
-    response = await axios.post("forgot-password", form.value);
+      response = await axios.post("forgot-password", form.value);
+
   } catch (error) {
     response = error.response;
     error = response.data;

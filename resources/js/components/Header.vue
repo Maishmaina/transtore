@@ -38,7 +38,7 @@
                                     <NavLink title="Facility Owners" :route="{name: 'facility-owners'}" v-if="permissions.includes('view facility owners')" />
                                     <NavLink title="Facilities List" :route="{name: 'facilities-list'}" v-if="permissions.includes('view facilities')" />
                                 </NavSubMenu>
-    
+
                                 <NavSubMenu title="Globals" icon-class="ki-outline ki-setting-2 fs-2" >
                                     <NavLink title="Roles & Permissions" :route="{name: 'roles-and-permissions'}" v-if="permissions.includes('view roles')"/>
                                     <NavLink title="Storage Types" :route="{name: 'storage-types'}" v-if="permissions.includes('view storage types')"/>
@@ -157,7 +157,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="separator my-2"></div>
 
                             <div class="menu-item px-5">
@@ -229,7 +229,7 @@ const signOut = async () => {
     let response = await logout()
 
     if (response.status == 200) {
-        router.push({name: 'login'})
+        router.push({name: 'admin_login'})
     } else {
         let err = response.data
         toast.error(err.message)

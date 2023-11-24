@@ -49,7 +49,7 @@ class AuthController extends Controller
     public function register(UserRequest $request)
     {
         $request->validate([
-            'password' => 'required|min:8|confirmed'
+            'password' => 'required|min:8'
         ]);
 
         $verificationCode = $this->generateCode('verification_code');
@@ -100,7 +100,7 @@ class AuthController extends Controller
         }
         return response()->json([
             'message' => 'Account verified successfully'
-        ]);
+        ],200);
     }
     public function forgotPassword(Request $request)
     {

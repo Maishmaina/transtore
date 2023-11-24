@@ -1,8 +1,8 @@
 <template>
     <TabularTemplate
-        resource="Customer" 
-        :fetched-data="users" 
-        :processing="processing" 
+        resource="Customer"
+        :fetched-data="users"
+        :processing="processing"
         :filter="filter"
         add-permission="create customers"
         @add-clicked="showAddModal"
@@ -56,12 +56,12 @@
         <template #modal-body>
             <div class="form-group">
                 <label for="first-name" class="required form-label">First Name</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.first_name}"
-                    id="first-name" 
-                    placeholder="Enter first name" 
-                    v-model="form.first_name" 
+                    id="first-name"
+                    placeholder="Enter first name"
+                    v-model="form.first_name"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.first_name">
@@ -70,12 +70,12 @@
             </div>
             <div class="form-group">
                 <label for="last-name" class="required form-label">Last Name</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.last_name}"
-                    id="last-name" 
-                    placeholder="Enter last name" 
-                    v-model="form.last_name" 
+                    id="last-name"
+                    placeholder="Enter last name"
+                    v-model="form.last_name"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.last_name">
@@ -84,12 +84,12 @@
             </div>
             <div class="form-group">
                 <label for="phone-number" class="form-label">Phone No.</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
+                <input type="text"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.phone_number}"
-                    id="phone-number" 
-                    placeholder="Enter phone number" 
-                    v-model="form.phone_number" 
+                    id="phone-number"
+                    placeholder="Enter phone number"
+                    v-model="form.phone_number"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.phone_number">
@@ -98,12 +98,12 @@
             </div>
             <div class="form-group">
                 <label for="email" class="required form-label">Email</label>
-                <input type="email" 
-                    class="form-control form-control-solid" 
+                <input type="email"
+                    class="form-control form-control-solid"
                     :class="{'is-invalid': errors.email}"
-                    id="email" 
-                    placeholder="Enter email" 
-                    v-model="form.email" 
+                    id="email"
+                    placeholder="Enter email"
+                    v-model="form.email"
                     :readonly="processing"
                 />
                 <div class="invalid-feedback" v-if="errors.email">
@@ -134,37 +134,37 @@
         <template #modal-body>
             <div class="form-group">
                 <label for="filter-first-name" class="form-label">First Name</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
-                    id="filter-first-name" 
-                    v-model="filters.first_name" 
+                <input type="text"
+                    class="form-control form-control-solid"
+                    id="filter-first-name"
+                    v-model="filters.first_name"
                     :readonly="processing"
                 />
             </div>
             <div class="form-group">
                 <label for="filter-last-name" class="form-label">Last Name</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
-                    id="filter-last-name" 
-                    v-model="filters.last_name" 
+                <input type="text"
+                    class="form-control form-control-solid"
+                    id="filter-last-name"
+                    v-model="filters.last_name"
                     :readonly="processing"
                 />
             </div>
             <div class="form-group">
                 <label for="filter-phone-number" class="form-label">Phone No.</label>
-                <input type="text" 
-                    class="form-control form-control-solid" 
-                    id="filter-phone-number" 
-                    v-model="filters.phone_number" 
+                <input type="text"
+                    class="form-control form-control-solid"
+                    id="filter-phone-number"
+                    v-model="filters.phone_number"
                     :readonly="processing"
                 />
             </div>
             <div class="form-group">
                 <label for="filter-email" class="form-label">Email</label>
-                <input type="email" 
-                    class="form-control form-control-solid" 
-                    id="filter-email" 
-                    v-model="filters.email" 
+                <input type="email"
+                    class="form-control form-control-solid"
+                    id="filter-email"
+                    v-model="filters.email"
                     :readonly="processing"
                 />
             </div>
@@ -244,9 +244,9 @@ const filters = ref({
 const fetchUsers = async (page = 1) => {
     let response = null
     try {
-        response = await axios.get(`users`, {
+        response = await axios.get(`admin/users`, {
             ...config,
-            
+
             params: {
                 page,
                 search: search.value,
@@ -262,7 +262,7 @@ const fetchUsers = async (page = 1) => {
     } catch (error) {
         response = error.response
     }
-    
+
     if (response.status == 200) {
         users.value = response.data
         processing.value = false
@@ -302,14 +302,14 @@ const clearForm = () => {
 const submitForm = async () => {
     errors.value = {}
     processing.value = true
-    
+
     let response = null
     try {
-        response = await axios.post('users', form.value, config)
+        response = await axios.post('admin/users', form.value, config)
     } catch (error) {
         response = error.response
     }
-    
+
     if (response.status == 201) {
         toast.success("Customer added successfully")
         clearForm()
@@ -331,9 +331,9 @@ const showFilterModal = () => {
 
 const filterUsers = async () => {
     $('#filter-modal .btn-sm').click()
-    
+
     processing.value = true
-    
+
     await fetchUsers()
 
     filter.value = true
@@ -347,7 +347,7 @@ watch(() => filters.value.from_date, () => {
 
 const clearFilters = async () => {
     processing.value = true
-    
+
     filters.value.first_name = ''
     filters.value.last_name = ''
     filters.value.phone_number = ''
@@ -378,7 +378,7 @@ const deleteUser = (id) => {
         if (result.isConfirmed) {
             let response = null
             try {
-                response = await axios.delete(`users/${id}`, config)
+                response = await axios.delete(`admin/users/${id}`, config)
             } catch (error) {
                 response = error.response
                 toast.error("Error deleting customer")

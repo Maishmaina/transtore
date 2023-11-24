@@ -269,7 +269,7 @@ const submitForm = async () => {
 
     let response = null
     try {
-        response = await axios.post('admins', form.value, config)
+        response = await axios.post('admin/admins', form.value, config)
     } catch (error) {
         response = error.response
     }
@@ -304,7 +304,7 @@ const admins = ref({})
 const fetchAdmins = async (page = 1) => {
     let response = null
     try {
-        response = await axios.get(`admins`, {
+        response = await axios.get(`admin/admins`, {
             ...config,
 
             params: {
@@ -337,7 +337,7 @@ const roles = ref([])
 onMounted(async () => {
     fetchAdmins()
 
-    axios.get('roles', {
+    axios.get('admin/roles', {
         ...config,
 
         params: {
@@ -402,7 +402,7 @@ const deleteAdmin = (id) => {
         if (result.isConfirmed) {
             let response = null
             try {
-                response = await axios.delete(`admins/${id}`, config)
+                response = await axios.delete(`admin/admins/${id}`, config)
             } catch (error) {
                 response = error.response
             }

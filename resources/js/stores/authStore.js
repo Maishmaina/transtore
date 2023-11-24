@@ -11,7 +11,7 @@ export const useAuthStore = defineStore(
         const login = async (data) => {
             let response = null;
             try {
-                response = await axios.post("login", data);
+                response = await axios.post("admin/login", data);
             } catch (error) {
                 response = error.response;
             }
@@ -25,7 +25,7 @@ export const useAuthStore = defineStore(
         const logout = async () => {
             let response = null;
             try {
-                response = await axios.delete("logout", config.value);
+                response = await axios.delete("admin/logout", config.value);
             } catch (error) {
                 response = error.response;
             }

@@ -6,11 +6,30 @@ export const useUserStore = defineStore(
     () => {
         const user = ref(null);
 
-        const userLogin = () => {
-            console.log(response.value);
-            user.value = {};
+        const registerUser = async (data) => {
+            let response = null;
+            try {
+                response = await axios.post("register", data);
+                user.value = response.data.user;
+            } catch (error) {
+                response = error.response;
+            }
+            return response;
         }
+        const loginUser = async (data) => {
 
-        return { user, userLogin };
+            let result = null;
+            try {
+                result = await axios.post('login', data);
+                user.value = result.data
+            } catch (error) {
+                result = error.response;
+            }
+            return result;
+        }
+        return { user, registerUser, loginUser };
+    },
+    {
+        persist: true,
     }
 )

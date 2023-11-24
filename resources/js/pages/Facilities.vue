@@ -242,7 +242,7 @@ const filters = ref({
 const fetchFacilities = async (page = 1) => {
     let response = null
     try {
-        response = await axios.get(`facilities`, {
+        response = await axios.get(`admin/facilities`, {
 
             ...config,
             params: {
@@ -274,7 +274,7 @@ const facility_owners = ref([])
 const fetchFacilityOwners = async (page = 1) => {
     let response = null
     try {
-        response = await axios.get(`facility-owners?paginate=false`, config)
+        response = await axios.get(`admin/facility-owners?paginate=false`, config)
     } catch (error) {
         response = error.response
     }
@@ -324,7 +324,7 @@ const submitForm = async () => {
 
     let response = null
     try {
-        response = await axios.post('facilities', form.value, config)
+        response = await axios.post('admin/facilities', form.value, config)
     } catch (error) {
         response = error.response
     }
@@ -394,7 +394,7 @@ const deleteFacility = (id) => {
         if (result.isConfirmed) {
             let response = null
             try {
-                response = await axios.delete(`facilities/${id}`, config)
+                response = await axios.delete(`admin/facilities/${id}`, config)
             } catch (error) {
                 response = error.response
                 toast.error("Error deleting facility")

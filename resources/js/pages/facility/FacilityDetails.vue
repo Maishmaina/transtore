@@ -242,7 +242,6 @@
 import { ref, onMounted, watch, reactive } from "vue";
 import { useRoute } from "vue-router";
 import { toast } from "vue3-toastify";
-import axios from "axios";
 import throttle from "lodash/throttle";
 import facilityUnitSteps from "@/components/facility/facility-unit-steps.vue";
 import facilityStepOne from "@/components/facility/facility-step-one.vue";
@@ -352,7 +351,7 @@ const submitData = async () => {
     result_aisle: aisleListing
   });
   try {
-    result = await axios.post("units", submit_result.value, config);
+    result = await axios.post("admin/units", submit_result.value, config);
   } catch (error) {
     processing.value = false;
     toast.error("Unit Mapping Failed, Confirm Details and Send");
@@ -380,7 +379,7 @@ const searching = value => {
 const fetchFacilityDetails = async (page = 1) => {
   let response = null;
   try {
-    response = await axios.get(`units`, {
+    response = await axios.get(`admin/units`, {
       ...config,
       params: {
         page,
@@ -419,7 +418,7 @@ const deleteUnit = id => {
     if (result.isConfirmed) {
       let response = null;
       try {
-        response = await axios.delete(`units/${id}`, config);
+        response = await axios.delete(`admin/units/${id}`, config);
       } catch (error) {
         response = error.response;
         toast.error("Error deleting facility");
@@ -461,7 +460,7 @@ const submitUnitEdit = async () => {
     let result;
       try {
       result = await axios.patch(
-        `units/${form.id}`,
+        `admin/units/${form.id}`,
         form,
         config
       );

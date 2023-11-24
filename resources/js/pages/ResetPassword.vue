@@ -65,22 +65,20 @@ const form = ref({
 });
 
 const submitForm = async () => {
+
   errors.value = {};
   processing.value = true;
-
   let response = null;
+
   try {
-    response = await axios.post("reset-password", form.value);
+    response = await axios.post("admin/reset-password", form.value);
   } catch (error) {
     response = error.response;
     error = response.data;
-
     toast.error(error.message);
     errors.value = error.errors ?? {};
   }
-
   processing.value = false;
-
   if (response.status == 200) {
     router.push({ name: "admin_login", query: { password_changed: true } });
   }

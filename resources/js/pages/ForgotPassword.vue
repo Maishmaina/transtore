@@ -59,7 +59,7 @@ const submitForm = async () => {
 
   let response = null;
   try {
-    response = await axios.post("forgot-password", form.value);
+    response = await axios.post("admin/forgot-password", form.value);
   } catch (error) {
     response = error.response;
     error = response.data;
