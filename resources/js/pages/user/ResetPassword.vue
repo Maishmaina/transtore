@@ -72,7 +72,6 @@ const submitForm = async () => {
   if (response.status == 200) {
     router.push({ name: "login", query: { password_changed: true } });
   }
-
 };
 </script>
 <style scoped></style>

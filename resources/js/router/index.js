@@ -25,11 +25,14 @@ import NotFound from "@/pages/NotFound.vue";
 
 //USER ROUTES
 import UserAuth from "@/components/user/UserAuth.vue";
+import UserMain from "@/components/user/UserMain.vue";
 import UserLogin from "@/pages/user/Login.vue";
 import UserRegister from "@/pages/user/Register.vue";
 import UserForgotPassword from "@/pages/user/ForgotPassword.vue";
 import VerifyUserAccount from "@/pages/user/VerifyUserAccount.vue"
 import UserSetPassword from "@/pages/user/ResetPassword.vue";
+
+import Facility from "@/pages/user/Facility.vue";
 
 const checkGuest = (to, from) => {
 
@@ -43,7 +46,6 @@ const checkGuest = (to, from) => {
     } else {
         return true;
     }
-
 };
 
 const router = createRouter({
@@ -180,7 +182,7 @@ const router = createRouter({
         },
         {
             // user auth routes
-            path: "/",
+            path: "/auth",
             component: UserAuth,
             children: [
                 {
@@ -213,18 +215,17 @@ const router = createRouter({
                     component: VerifyUserAccount,
                     beforeEnter: checkGuest,
                 }
-
             ],
         },
         //authorized user/customer routes
         {
             path: "/",
-            component: UserAuth,
+            component: UserMain,
             children: [
                 {
                     path: "/facility",
                     name: "facility",
-                    component: UserLogin,
+                    component: Facility,
                 },
             ]
         }
@@ -233,8 +234,9 @@ const router = createRouter({
 router.beforeEach((to, from) => {
 
     const { authUser, permissions } = useAuthStore();
-
-    if (to.meta.requiresAuth && !authUser) {
+    const { user } = useUserStore();
+    console.log(authUser);
+    if (to.meta.requiresAuth && (!authUser)) {
         return {
             name: "login",
         };
@@ -245,7 +247,5 @@ router.beforeEach((to, from) => {
             name: "home",
         };
     }
-
 });
-
 export default router;

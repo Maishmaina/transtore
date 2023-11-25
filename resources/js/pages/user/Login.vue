@@ -66,6 +66,10 @@ const route = useRoute();
 const router = useRouter();
 let { loginUser } = useUserStore();
 
+if (route.query.password_changed) {
+  toast.success("Password changed successfully. Please login.");
+}
+
 const form = ref({
   email: "",
   password: "",
