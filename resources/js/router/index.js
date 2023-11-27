@@ -33,6 +33,7 @@ import VerifyUserAccount from "@/pages/user/VerifyUserAccount.vue"
 import UserSetPassword from "@/pages/user/ResetPassword.vue";
 
 import Facility from "@/pages/user/Facility.vue";
+import RentFacility from "@/pages/user/RentFacility.vue";
 
 const checkGuest = (to, from) => {
 
@@ -223,14 +224,20 @@ const router = createRouter({
             component: UserMain,
             children: [
                 {
-                    path: "/facility",
+                    path: "/",
                     name: "facility",
                     component: Facility,
+                },
+                {
+                    path: "/rent-facility",
+                    name: "rent-facility",
+                    component: RentFacility,
                 },
             ]
         }
     ],
 });
+
 router.beforeEach((to, from) => {
 
     const { authUser, permissions } = useAuthStore();
