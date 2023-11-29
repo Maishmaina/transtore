@@ -34,6 +34,7 @@ import UserSetPassword from "@/pages/user/ResetPassword.vue";
 
 import Facility from "@/pages/user/Facility.vue";
 import RentFacility from "@/pages/user/RentFacility.vue";
+import RentFacilityDateLocation from "@/pages/user/RentFacilityDateLocation.vue";
 
 const checkGuest = (to, from) => {
 
@@ -233,6 +234,11 @@ const router = createRouter({
                     name: "rent-facility",
                     component: RentFacility,
                 },
+                {
+                    path: "/facility-filter",
+                    name: "facility-filter",
+                    component: RentFacilityDateLocation,
+                }
             ]
         }
     ],

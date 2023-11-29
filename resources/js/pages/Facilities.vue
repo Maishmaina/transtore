@@ -164,23 +164,7 @@
 
       <div class="form-group" v-if="storageTypes">
         <label for="Indoor" class="required form-label">Indoor Type</label>
-        <select
-          class="form-select form-select-sm form-select-solid"
-          data-control="select2"
-          data-close-on-select="false"
-          data-placeholder="Select an option"
-          data-allow-clear="true"
-          multiple="multiple"
-          id="one_select"
-          v-model="form.indoor"
-        >
-          <option value>Select Storage Type</option>
-          <option
-            :value="indoor.id"
-            v-for="indoor in storageTypes[0].subtypes"
-            :key="indoor.id"
-          >{{ indoor.name }}</option>
-        </select>
+       <Multiselect v-model="form.indoor" v-bind="ui_indoor"></Multiselect>
       </div>
 
         <div class="form-group" v-if="storageTypes">
@@ -212,7 +196,6 @@
         <label class="form-check-label" for="enabled">Enabled</label>
       </div>
     </template>
-
     <template #modal-footer>
       <button type="button" class="btn btn-primary" @click="submitForm">
         <span class="indicator-label" v-if="!processing">Submit</span>
@@ -316,13 +299,14 @@ import Swal from "sweetalert2";
 import throttle from "lodash/throttle";
 import { toast } from "vue3-toastify";
 import { onMounted, ref, watch } from "vue";
+import Multiselect from "@vueform/multiselect";
 import { useAuthStore } from "@/stores/authStore.js";
 import { Bootstrap5Pagination as Pagination } from "laravel-vue-pagination";
 import TabularTemplate from "@/components/TabularTemplate.vue";
 import Modal from "@/components/Modal.vue";
 
 const { config, permissions } = useAuthStore();
-
+console.log(config);
 const processing = ref(true);
 
 const facilities = ref({});
@@ -343,6 +327,7 @@ const filters = ref({
   from_date: "",
   to_date: ""
 });
+
 
 const fetchFacilities = async (page = 1) => {
   let response = null;
@@ -398,9 +383,9 @@ const fetchStorageTypes = async (page = 1) => {
   }
 
   if (response.status == 200) {
-    console.log(response.data.data);
     storageTypes.value = response.data.data;
-    processing.value = false;
+      processing.value = false;
+    console.log(storageTypes.value);
   } else {
     toast.error("Error fetching storage types list");
   }
@@ -412,8 +397,33 @@ onMounted(() => {
   fetchStorageTypes();
 });
 
+
+const returnItemList = (item) => {
+    let items = [];
+item.forEach(ind => {
+    let it = { value: ind.id, label: ind.name }
+        items.push(it);
+})
+    console.log(items);
+    return items;
+}
+
+// returnItemList(storageTypes.value[0].subtypes);
+
+const ui_indoor = ref({
+    mode: "tags",
+    value: [],
+    options:
+        []
+        ,
+        searchable: true,
+        createTag: true,
+    });
+
 const showAddModal = () => {
-  $("#add-modal").modal("show");
+    $("#add-modal").modal("show");
+
+  returnItemList(storageTypes.value[0].subtypes);
 };
 
 const errors = ref({});
@@ -426,8 +436,8 @@ const form = ref({
   location_longitude: "",
   access_period: "",
   enabled: true,
-  indoor: '',
-  outdoor:'',
+  indoor: [],
+  outdoor:[],
 });
 
 const clearForm = () => {

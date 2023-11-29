@@ -7,11 +7,8 @@
             <div class="col-6">
               <div class="card-px pt-10 pb-15">
                 <div class="text-center">
-                  <h1 class="fw-bold">Rent a storage unit</h1>
-                  <h3
-                    class="mb-0 text-gray-600"
-                  >Search and rent a storage unit from storage facility across the country that match your storage needs. Search and rent storage facilities and units, view and manage your storage rentals, request a pick-up/drop-off for your storage items.</h3>
-                </div>
+                 search:
+                  </div>
                 <hr class="border-2" />
                 <div class="text-center pt-5">
                   <h2 class="fw-bold">What would you like to store?</h2>
@@ -21,8 +18,7 @@
                     <h1 class="fw-bold text-primary py-10">
                       <span>{{ store.name }} Storage</span>
                     </h1>
-
-                    <router-link to="facility-filter"
+                    <div
                       v-for="substore in store.subtypes"
 
                       class="mb-5"
@@ -50,7 +46,7 @@
                         </span>
                       </span>
                       <hr />
-                    </router-link>
+                    </div>
                   </div>
                 </div>
               </div>

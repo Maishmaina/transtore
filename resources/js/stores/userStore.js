@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 export const useUserStore = defineStore(
     "userStore",
@@ -27,7 +27,15 @@ export const useUserStore = defineStore(
             }
             return result;
         }
-        return { user, registerUser, loginUser };
+
+        const user_config = computed(() => {
+            return {
+                headers: {
+                    Authorization: `Bearer ${user.value.token}`,
+                },
+            };
+        });
+        return { user, user_config, registerUser, loginUser };
     },
     {
         persist: true,

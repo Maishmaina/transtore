@@ -73,8 +73,7 @@
   </div>
 </template>
 <script setup>
-import { useUserStore } from "@/stores/userStore.js";
-let { user } = useUserStore();
+
 
 const returnGreetings = () => {
   const date = new Date();
