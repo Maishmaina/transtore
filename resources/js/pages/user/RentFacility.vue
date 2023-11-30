@@ -10,7 +10,7 @@
                   <h1 class="fw-bold">Rent a storage unit</h1>
                   <h3
                     class="mb-0 text-gray-600"
-                  >Search and rent a storage unit from storage facility across the country that match your storage needs. Search and rent storage facilities and units, view and manage your storage rentals, request a pick-up/drop-off for your storage items.</h3>
+                  >Search and rent a storage unit from storage facility across the country that match your storage needs.</h3>
                 </div>
                 <hr class="border-2" />
                 <div class="text-center pt-5">
@@ -24,7 +24,7 @@
 
                     <router-link to="facility-filter"
                       v-for="substore in store.subtypes"
-
+                      @click="saveClickedType(substore)"
                       class="mb-5"
                       :key="substore.id"
                     >
@@ -38,7 +38,7 @@
                           </h1>
                           <span
                             class="fs-6 fw-semibold text-black"
-                          >Search and rent storage facilities and units, view and manage your storage rentals, request a pick-up/drop-off for your storage items.</span>
+                          >Search and rent storage facilities and units, view and manage your storage rentals, request a pick-up/drop-off for your storage items. Search and rent storage facilities and units, view and manage your storage rentals, request a pick-up/drop-off for your storage items</span>
                         </span>
                         <span class="form-check form-check-custom ">
                           <input
@@ -69,6 +69,9 @@ import { toast } from "vue3-toastify";
 import { useUserStore } from "@/stores/userStore.js";
 let { user_config } = useUserStore();
 
+import { useRentFacilityStore } from "@/stores/rentFacilityStore.js";
+let { saveSelectedFacility } = useRentFacilityStore();
+
 const storageTypes = ref();
 
 onMounted(() => {
@@ -89,6 +92,10 @@ const fetchStorageTypes = async () => {
     toast.error("Error fetching storage types list");
   }
 };
+const saveClickedType = (s_type) => {
+
+    saveSelectedFacility(s_type);
+}
 </script>
 <style scoped>
 </style>
