@@ -9,4 +9,8 @@ class Sections extends Model
 {
     use HasFactory;
     protected $fillable = ['facility_id','name'];
+
+    public function aisle(){
+        return $this->hasMany(Aisles::class,'section_id');
+    }
 }

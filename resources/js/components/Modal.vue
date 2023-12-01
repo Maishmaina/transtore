@@ -12,7 +12,6 @@
                 <div class="modal-body">
                     <slot name="modal-body" />
                 </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                     <slot name="modal-footer" />

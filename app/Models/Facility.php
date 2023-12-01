@@ -52,6 +52,9 @@ class Facility extends Model
     {
         return $this->hasMany(FacilityReview::class);
     }
+    public function section(){
+        return $this->hasMany(Sections::class);
+    }
 
     public function coordinates(): Attribute
     {

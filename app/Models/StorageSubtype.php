@@ -14,4 +14,10 @@ class StorageSubtype extends Model
         'storage_type_id',
         'name'
     ];
+
+    public function facilities(){
+
+        return $this->belongsToMany(Facility::class,'facility_storage_subtype');
+
+    }
 }

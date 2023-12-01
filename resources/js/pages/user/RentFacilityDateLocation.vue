@@ -80,11 +80,14 @@
                         <h3 style="line-height: 0.1!important;">KES 200</h3>
                         <p>Per Day</p>
                       </div>
-                      <button @click="showFilterModal('data')" class="btn btn-warning btn-sm">Select Unit</button>
+                      <button
+                        @click="showFilterModal('data')"
+                        class="btn btn-warning btn-sm"
+                      >Select Unit</button>
                     </div>
                   </div>
                   <hr />
-                   <div class="d-flex flex-wrap justify-content-between">
+                  <div class="d-flex flex-wrap justify-content-between">
                     <div class="d-flex flex-column">
                       <h1 class="fw-bold text-primary d-flex flex-wrap">
                         <span class="mr-3">ABC warehouse</span>
@@ -121,11 +124,13 @@
                         <h3 style="line-height: 0.1!important;">KES 200</h3>
                         <p>Per Day</p>
                       </div>
-                      <button @click="showFilterModal('data')" class="btn btn-warning btn-sm">Select Unit</button>
+                      <button
+                        @click="showFilterModal('data')"
+                        class="btn btn-warning btn-sm"
+                      >Select Unit</button>
                     </div>
                   </div>
                   <hr />
-
                 </div>
                 <div></div>
               </div>
@@ -138,74 +143,80 @@
   </div>
   <Modal id="select-unit-modal" title="Select Unit">
     <template #modal-body>
-        <div class="mb-1 card border-warning border p-4">
-                  <div class="d-flex flex-wrap justify-content-between border-bottom">
-                    <div class="d-flex flex-column">
-                      <h5 class="text-primary">Select Unit</h5>
-                    </div>
-                    <div class="pr-15 ">
-                        <h5>ABC Warehouse Limited</h5>
-                    </div>
-                  </div>
-                   <span class="d-flex flex-wrap flex-center my-4">
-                    <h2 class="fw-bold text-primary">
-                      <i class="fas fa-bicycle text-black bg-warning p-1 fs-2 rounded-circle"></i>
-                      <span style="margin-left: 5px;">Personal Items</span>
-                    </h2>
-                  </span>
-                  <div class="table-responsive">
-                    <table class="table table-hover fs-6 gy-5">
-                        <thead>
-                            <tr class="border">
-                                <th>Option</th>
-                                <th>Dimension</th>
-                                <th>Weight</th>
-                                <th>Per Day</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border">
-                                <td>Small</td>
-                                <td>5*5*5(cm)</td>
-                                <td>200kg</td>
-                                <td>KES 200</td>
-                                <td><button class="btn btn-outline btn-active-light-warning btn-sm">Select</button></td>
-                            </tr>
-                              <tr class="border">
-                                <td>Medium</td>
-                                <td>5*5*10(cm)</td>
-                                <td>300kg</td>
-                                <td>KES 300</td>
-                                <td><button class="btn btn-outline btn-active-light-warning btn-sm">Select</button></td>
-                            </tr>
-                             <tr class="border">
-                                <td>Large</td>
-                                <td>5*5*20(cm)</td>
-                                <td>400kg</td>
-                                <td>KES 500</td>
-                                <td><button class="btn btn-outline btn-active-light-warning btn-sm">Select</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                  </div>
-                </div>
+      <div class="mb-1 card border-warning border p-4">
+        <div class="d-flex flex-wrap justify-content-between border-bottom">
+          <div class="d-flex flex-column">
+            <h5 class="text-primary">Select Unit</h5>
+          </div>
+          <div class="pr-15">
+            <h5>ABC Warehouse Limited</h5>
+          </div>
+        </div>
+        <span class="d-flex flex-wrap flex-center my-4">
+          <h2 class="fw-bold text-primary">
+            <i class="fas fa-bicycle text-black bg-warning p-1 fs-2 rounded-circle"></i>
+            <span style="margin-left: 5px;">Personal Items</span>
+          </h2>
+        </span>
+        <div class="table-responsive">
+          <table class="table table-hover fs-6 gy-5">
+            <thead>
+              <tr class="border">
+                <th>Option</th>
+                <th>Dimension</th>
+                <th>Weight</th>
+                <th>Per Day</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border">
+                <td>Small</td>
+                <td>5*5*5(cm)</td>
+                <td>200kg</td>
+                <td>KES 200</td>
+                <td>
+                  <button class="btn btn-outline btn-active-light-warning btn-sm">Select</button>
+                </td>
+              </tr>
+              <tr class="border">
+                <td>Medium</td>
+                <td>5*5*10(cm)</td>
+                <td>300kg</td>
+                <td>KES 300</td>
+                <td>
+                  <button class="btn btn-outline btn-active-light-warning btn-sm">Select</button>
+                </td>
+              </tr>
+              <tr class="border">
+                <td>Large</td>
+                <td>5*5*20(cm)</td>
+                <td>400kg</td>
+                <td>KES 500</td>
+                <td>
+                  <button class="btn btn-outline btn-active-light-warning btn-sm">Select</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </template>
     <template #modal-footer>
-      <button type="button" class="btn btn-primary" >
+      <button type="button" class="btn btn-primary">
         <span class="indicator-label">Add Cart</span>
-        <span class="indicator-progress d-none" >
+        <span class="indicator-progress d-none">
           Please wait...
           <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
         </span>
       </button>
     </template>
   </Modal>
-
 </template>
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { toast } from "vue3-toastify";
+import moment from "moment";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import throttle from "lodash/throttle";
@@ -215,8 +226,12 @@ import { useRentFacilityStore } from "@/stores/rentFacilityStore.js";
 import Modal from "@/components/Modal.vue";
 
 let { user_config } = useUserStore();
-let { facility_type, rent_dates,rent_location,saveSelectedRage } = useRentFacilityStore();
-
+let {
+  facility_type,
+  rent_dates,
+  rent_location,
+  saveSelectedRage
+} = useRentFacilityStore();
 
 const storageTypes = ref();
 
@@ -229,7 +244,7 @@ onMounted(() => {
 
   const startDate = new Date();
   const endDate = new Date(new Date().setDate(startDate.getDate() + 7));
-  rent_date.value =rent_dates ? rent_dates: [startDate, endDate];
+  rent_date.value = rent_dates ? rent_dates : [startDate, endDate];
 });
 
 const fetchStorageTypes = async () => {
@@ -247,29 +262,55 @@ const fetchStorageTypes = async () => {
   }
 };
 //fetch units from the system:
+const dateFormatter = (date) => {
 
-const returnUnitSearch = () => {
-
-    saveSelectedRage(rent_date.value, search_text.value);
-    //fetch
+    return  moment(date).format("YYYY-MM-D hh:mm:ss");
 }
 
-watch(
-    () => search_text.value,
-      throttle(() => {
-     returnUnitSearch()
-  }, 600)
-)
+const filterFacilityUnit = async () => {
+    saveSelectedRage(rent_date.value, search_text.value);
 
-watch(
-    () => rent_date.value,
-    () => returnUnitSearch()
-)
+    let ui_start_date = rent_date.value[0];
+    let ui_end_date = rent_date.value[1];
 
-const showFilterModal = (data) => {
+    let data = {
+    store_sub_type: facility_type.id,
+    start_date: dateFormatter(ui_start_date),
+    end_date: dateFormatter(ui_end_date),
+    location: search_text.value
+
+  };
     console.log(data);
+
+    //fetch data from search
+    let response = null;
+
+    try {
+        response=await axios.get("/facility-filter-units?store_sub_type=1&location=park suite&start_date=2023-12-01 12:31:18&end_date=2023-12-01 12:31:18",user_config)
+    } catch (error) {
+        console.log(error);
+    }
+
+    console.log(response);
+};
+
+watch(
+  () => search_text.value,
+  throttle(() => {
+    filterFacilityUnit();
+  }, 600)
+);
+
+watch(
+  () => rent_date.value,
+  () => filterFacilityUnit()
+);
+
+const showFilterModal = data => {
+  console.log(data);
   $("#select-unit-modal").modal("show");
 };
+
 </script>
 <style scoped>
 </style>
