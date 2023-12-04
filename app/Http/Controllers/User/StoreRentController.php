@@ -22,8 +22,10 @@ class StoreRentController extends Controller
         try {
              $getStore = StorageSubtype::find($request->store_sub_type);
              $getFacility = $getStore->facilities()
-                                ->where('location', 'LIKE', '%'.$loc.'%')
-                                ->paginate(10);
+                                 ->FacilityReview()
+                                 ->where('location', 'LIKE', '%'.$loc.'%')
+                                 ->orderBy('id','DESC')
+                                 ->paginate(10);
         } catch (\Throwable $th) {
             return response()->json([
                 'message' => 'Sorry, No result found for this query'

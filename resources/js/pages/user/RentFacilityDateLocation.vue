@@ -19,7 +19,7 @@
                         <input
                           type="text"
                           class="form-control"
-                          placeholder="Location"
+                          placeholder="Search by Location"
                           aria-describedby="basic-addon1"
                           v-model="search_text"
                         />
@@ -34,6 +34,7 @@
                   </span>
                 </div>
                 <hr class="border-1" />
+                <div v-if="facilityUnitListing.length">
                 <div class="d-flex justify-content-between">
                   <h6>50 Facilities</h6>
                   <h6>
@@ -41,56 +42,15 @@
                     <!-- <i class="ki-solid ki-down-square text-black fs-2"></i> -->
                   </h6>
                 </div>
-                <hr class="border-1" />
-                <div class="mb-1">
-                  <div class="d-flex flex-wrap justify-content-between">
+                <hr class="border-1"/>
+
+                <div v-for="facility in   facilityUnitListing" :key="facility.id" class="mb-1">
+
+                  <div
+                  class="d-flex flex-wrap justify-content-between">
                     <div class="d-flex flex-column">
                       <h1 class="fw-bold text-primary d-flex flex-wrap">
-                        <span class="mr-3">ABC warehouse</span>
-                        <div class="rating justify-content-end" style="margin-left: 5px;">
-                          <div class="rating-label checked">
-                            <i class="ki-solid ki-star fs-6"></i>
-                          </div>
-                          <div class="rating-label checked">
-                            <i class="ki-solid ki-star fs-6"></i>
-                          </div>
-                          <div class="rating-label checked">
-                            <i class="ki-solid ki-star fs-6"></i>
-                          </div>
-                          <div class="rating-label">
-                            <i class="ki-solid ki-star fs-6"></i>
-                          </div>
-                          <div class="rating-label">
-                            <i class="ki-outline ki-star fs-6"></i>
-                          </div>
-                        </div>
-                      </h1>
-                      <span class="text-black">
-                        Rated
-                        <span class="fw-bold">4</span> out of
-                        <span class="fw-bold">5</span> from
-                        <span class="text-primary">1,000 Reviews</span>
-                      </span>
-                      <p class="fw-bold text-primary my-1">Indoor and Outdoor units</p>
-                      <span class="text-black">Small, Medium and Large units available</span>
-                    </div>
-                    <div class="pr-15 justify-content-center">
-                      <div class="d-flex flex-column align-items-center">
-                        <p>From</p>
-                        <h3 style="line-height: 0.1!important;">KES 200</h3>
-                        <p>Per Day</p>
-                      </div>
-                      <button
-                        @click="showFilterModal('data')"
-                        class="btn btn-warning btn-sm"
-                      >Select Unit</button>
-                    </div>
-                  </div>
-                  <hr />
-                  <div class="d-flex flex-wrap justify-content-between">
-                    <div class="d-flex flex-column">
-                      <h1 class="fw-bold text-primary d-flex flex-wrap">
-                        <span class="mr-3">ABC warehouse</span>
+                        <span class="mr-3">{{ facility.name }}</span>
                         <div class="rating justify-content-end" style="margin-left: 5px;">
                           <div class="rating-label checked">
                             <i class="ki-solid ki-star fs-6"></i>
@@ -132,6 +92,8 @@
                   </div>
                   <hr />
                 </div>
+                </div>
+                <div><span class="text-muted"> Nothing Found for this Filter Try Other parameters</span></div>
                 <div></div>
               </div>
             </div>
@@ -233,66 +195,55 @@ let {
   saveSelectedRage
 } = useRentFacilityStore();
 
-const storageTypes = ref();
+const facilityUnitListing = ref([]);
 
 //set date picker
 const rent_date = ref();
 const search_text = ref(rent_location);
 
+//fetch units from the system:
+const dateFormatter = date => {
+  return moment(date).format("YYYY-MM-D hh:mm:ss");
+};
+
 onMounted(() => {
-  fetchStorageTypes();
+
 
   const startDate = new Date();
   const endDate = new Date(new Date().setDate(startDate.getDate() + 7));
-  rent_date.value = rent_dates ? rent_dates : [startDate, endDate];
+    rent_date.value = rent_dates ? rent_dates : [startDate, endDate];
+
 });
 
-const fetchStorageTypes = async () => {
+const filterFacilityUnit = async() => {
+
+  saveSelectedRage(rent_date.value, search_text.value);
+
+  let ui_start_date = rent_date.value[0];
+  let ui_end_date = rent_date.value[1];
+
+  let store_sub_type = facility_type.id;
+  let start_date = dateFormatter(ui_start_date);
+  let end_date = dateFormatter(ui_end_date);
+  let location = search_text.value;
+
+  //fetch data from search
   let response = null;
+
   try {
-    response = await axios.get("/storage-type-list", user_config);
+    response =  await axios.get(
+      `/facility-filter-units?store_sub_type=${store_sub_type}&location=${location}&start_date=${start_date}&end_date=${end_date}`,
+      user_config
+    );
   } catch (error) {
-    response = error.response;
+      console.log(error);
+      toast.error('Error when loading Facility List,');
   }
 
-  if (response.status == 200) {
-    storageTypes.value = response.data;
-  } else {
-    toast.error("Error fetching storage types list");
-  }
+  facilityUnitListing.value = response.data.data;
+  console.log(response.data);
 };
-//fetch units from the system:
-const dateFormatter = (date) => {
 
-    return  moment(date).format("YYYY-MM-D hh:mm:ss");
-}
-
-const filterFacilityUnit = async () => {
-    saveSelectedRage(rent_date.value, search_text.value);
-
-    let ui_start_date = rent_date.value[0];
-    let ui_end_date = rent_date.value[1];
-
-    let data = {
-    store_sub_type: facility_type.id,
-    start_date: dateFormatter(ui_start_date),
-    end_date: dateFormatter(ui_end_date),
-    location: search_text.value
-
-  };
-    console.log(data);
-
-    //fetch data from search
-    let response = null;
-
-    try {
-        response=await axios.get("/facility-filter-units?store_sub_type=1&location=park suite&start_date=2023-12-01 12:31:18&end_date=2023-12-01 12:31:18",user_config)
-    } catch (error) {
-        console.log(error);
-    }
-
-    console.log(response);
-};
 
 watch(
   () => search_text.value,
@@ -310,7 +261,6 @@ const showFilterModal = data => {
   console.log(data);
   $("#select-unit-modal").modal("show");
 };
-
 </script>
 <style scoped>
 </style>

@@ -93,4 +93,11 @@ class Facility extends Model
             });
         });
     }
+
+    public function scopeFacilityReview($query){
+        return $query->withCount(['reviews' => function ($query) { $query->select(\DB::raw('coalesce(sum(stars), 0)')); }]);
+    }
+     public function scopeFacilityReviewAvg($query){
+        return $query->withCount(['reviews' => function ($query) { $query->select(\DB::raw('coalesce(avg(stars), 0)')); }]);
+    }
 }

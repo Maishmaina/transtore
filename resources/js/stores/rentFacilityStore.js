@@ -9,7 +9,6 @@ export const useRentFacilityStore = defineStore(
         const rent_location = ref("");
 
         const saveSelectedFacility = (store_type) => {
-            console.log(store_type);
             facility_type.value = store_type;
         }
         const saveSelectedRage = (dates, location) => {
