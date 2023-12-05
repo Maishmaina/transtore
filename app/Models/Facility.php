@@ -94,10 +94,13 @@ class Facility extends Model
         });
     }
 
-    public function scopeFacilityReview($query){
-        return $query->withCount(['reviews' => function ($query) { $query->select(\DB::raw('coalesce(sum(stars), 0)')); }]);
-    }
+
      public function scopeFacilityReviewAvg($query){
-        return $query->withCount(['reviews' => function ($query) { $query->select(\DB::raw('coalesce(avg(stars), 0)')); }]);
+        return $query->withCount('reviews')->with(['reviews' => function ($query) { $query->selectRaw('AVG(stars) as average_rating, facility_id')->groupBy('facility_id'); }]);
+    }
+    public function scopeReturnBasicUnits($query){
+        $result = $query->with('section.aisle.units' , function ($q){
+            $q->where('available_status','1');});
+       return $result;
     }
 }

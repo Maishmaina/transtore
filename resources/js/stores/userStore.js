@@ -27,6 +27,20 @@ export const useUserStore = defineStore(
             }
             return result;
         }
+        const userLogout = async () => {
+            let response = null;
+
+            try {
+                response = await axios.post("logout", user_config.value);
+            } catch (error) {
+                response = error.response;
+            }
+            if (response.status == 200) {
+                user.value = [];
+            }
+
+            return response;
+        };
 
         const user_config = computed(() => {
             return {
@@ -35,7 +49,7 @@ export const useUserStore = defineStore(
                 },
             };
         });
-        return { user, user_config, registerUser, loginUser };
+        return { user, user_config, registerUser, loginUser, userLogout };
     },
     {
         persist: true,

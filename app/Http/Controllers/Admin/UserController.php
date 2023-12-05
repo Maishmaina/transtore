@@ -86,7 +86,6 @@ class UserController extends Controller
         } catch (Exception $e) {
             return $this->respondWithError('Failed to update user', $e);
         }
-
         return response()->json([
             'message' => "User updated successfully",
             'user' => new UserResource($user->fresh())

@@ -36,7 +36,7 @@
                 <hr class="border-1" />
                 <div v-if="facilityUnitListing.length">
                 <div class="d-flex justify-content-between">
-                  <h6>50 Facilities</h6>
+                  <h6> {{ facilityUnitListing.length }} Facilities</h6>
                   <h6>
                     <span>Rating</span>
                     <!-- <i class="ki-solid ki-down-square text-black fs-2"></i> -->
@@ -61,7 +61,7 @@
                           <div class="rating-label checked">
                             <i class="ki-solid ki-star fs-6"></i>
                           </div>
-                          <div class="rating-label">
+                          <div class="rating-label checked">
                             <i class="ki-solid ki-star fs-6"></i>
                           </div>
                           <div class="rating-label">
@@ -90,10 +90,10 @@
                       >Select Unit</button>
                     </div>
                   </div>
-                  <hr />
+                  <hr/>
                 </div>
                 </div>
-                <div><span class="text-muted"> Nothing Found for this Filter Try Other parameters</span></div>
+                <div v-else><span class="text-muted"> Nothing Found for this Filter Try Other Filters</span></div>
                 <div></div>
               </div>
             </div>

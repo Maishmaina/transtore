@@ -19,6 +19,7 @@ Route::middleware('auth:user_api')->group(function () {
     //User Store Rental storage-type-list
     Route::get('storage-type-list',[StoreRentController::class,'getStorageType']);
     Route::get('facility-filter-units',[StoreRentController::class,'filterFacilityUnit']);
+    Route::get('facility-units/{facility}',[StoreRentController::class,'fetchUnitBySizeForFacility']);
 
     Route::post('logout', [AuthController::class, 'logout'])->name('user_logout');
 });
