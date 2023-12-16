@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminSeeder extends Seeder
 {
+
     /**
      * Run the database seeds.
      */
