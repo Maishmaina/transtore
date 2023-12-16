@@ -8,7 +8,8 @@
               <div class="card-px pt-10 pb-15">
                 <div class="text-center">
                   <h1 class="fw-bold">Rent a storage unit</h1>
-                  <h3 class="mb-0 text-gray-600"
+                  <h3
+                    class="mb-0 text-gray-600"
                   >Search and rent a storage unit from storage facility across the country that match your storage needs.</h3>
                 </div>
                 <hr class="border-2" />
@@ -16,82 +17,41 @@
                   <h2 class="fw-bold">What would you like to store?</h2>
                 </div>
                 <div>
-                  <h1 class="fw-bold text-primary py-5">
-                    <span>Indoor Storage</span>
-                  </h1>
-                <router-link to="home" class="mb-5 cursor-pointer">
-                  <span class="d-flex align-items-left me-2">
-                    <span class="d-flex flex-column">
-                      <h1 class="fw-bold text-primary">
-                        <i class="ki-outline ki-lock-3 text-black bg-warning fs-2x rounded-circle"></i>
-                        <span style="margin-left: 5px;">Rent A Storage Unit</span>
-                      </h1>
-                      <span
-                        class="fs-6 fw-semibold text-black"
-                      >Search and rent storage facilities and units, view and manage your storage rentals, request a pick-up/drop-off for your storage items.</span>
-                    </span>
-                    <span class="pt-15">
-                      <i class="ki-duotone ki-black-right fs-2x"></i>
-                    </span>
-                  </span>
-                </router-link>
-                <hr />
-                <router-link to="/" class="mb-5 cursor-pointer border-top pt-5">
-                  <span class="d-flex align-items-left me-2">
-                    <span class="d-flex flex-column">
-                      <h1 class="fw-bold text-primary">
-                        <i class="ki-outline ki-scooter text-black bg-warning fs-2x rounded-circle"></i>
-                        <span style="margin-left: 5px;">Transport</span>
-                      </h1>
-                      <h3 class="fw-bold">Request transport services</h3>
-                      <span
-                        class="fs-6 fw-semibold text-black"
-                      >Request transport services for your personal or bulk items to and from a destination.</span>
-                    </span>
-                    <span class="pt-15">
-                      <i class="ki-duotone ki-black-right fs-2x"></i>
-                    </span>
-                  </span>
-                </router-link>
-                <hr />
-                <h1 class="fw-bold text-primary py-5">
-                    <span>Outdoor Storage</span>
-                  </h1>
+                  <div v-for="store in storageTypes " :key="store.id">
+                    <h1 class="fw-bold text-primary py-10">
+                      <span>{{ store.name }} Storage</span>
+                    </h1>
 
-                <router-link to="home" class="mb-5 cursor-pointer">
-                  <span class="d-flex align-items-left me-2">
-                    <span class="d-flex flex-column">
-                      <h1 class="fw-bold text-primary">
-                        <i class="ki-outline ki-lock-3 text-black bg-warning fs-2x rounded-circle"></i>
-                        <span style="margin-left: 5px;">Rent A Storage Unit</span>
-                      </h1>
-                      <span
-                        class="fs-6 fw-semibold text-black"
-                      >Search and rent storage facilities and units, view and manage your storage rentals, request a pick-up/drop-off for your storage items.</span>
-                    </span>
-                    <span class="pt-15">
-                      <i class="ki-duotone ki-black-right fs-2x"></i>
-                    </span>
-                  </span>
-                </router-link>
-                <hr />
-                <router-link to="/" class="mb-5 cursor-pointer border-top pt-5">
-                  <span class="d-flex align-items-left me-2">
-                    <span class="d-flex flex-column">
-                      <h1 class="fw-bold text-primary">
-                        <i class="ki-outline ki-scooter text-black bg-warning fs-2x rounded-circle"></i>
-                        <span style="margin-left: 5px;">Transport</span>
-                      </h1>
-                      <h3 class="fw-bold">Request transport services</h3>
-                      <span
-                        class="fs-6 fw-semibold text-black"
-                      >Request transport services for your personal or bulk items to and from a destination.</span>
-                    </span>
-                    <span class="pt-15">
-                      <i class="ki-duotone ki-black-right fs-2x"></i>
-                    </span>
-                  </span>
-                </router-link>
+                    <router-link to="facility-filter"
+                      v-for="substore in store.subtypes"
+                      @click="saveClickedType(substore)"
+                      class="mb-5"
+                      :key="substore.id"
+                    >
+                      <span class="d-flex align-items-left me-2">
+                        <span class="d-flex flex-column">
+                          <h1 class="fw-bold text-primary">
+                            <i
+                              class="ki-outline ki-lock-3 text-black bg-warning fs-2x rounded-circle"
+                            ></i>
+                            <span style="margin-left: 5px;">{{ substore.name }}</span>
+                          </h1>
+                          <span
+                            class="fs-6 fw-semibold text-black"
+                          >Search and rent storage facilities and units, view and manage your storage rentals, request a pick-up/drop-off for your storage items. Search and rent storage facilities and units, view and manage your storage rentals, request a pick-up/drop-off for your storage items</span>
+                        </span>
+                        <span class="form-check form-check-custom ">
+                          <input
+                            class="form-check-input  cursor-pointer"
+                            type="radio"
+                            name="account_plan"
+                            value="1"
+                          />
+                        </span>
+                      </span>
+                      <hr />
+                    </router-link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -103,6 +63,39 @@
   </div>
 </template>
 <script setup>
+import { ref, onMounted } from "vue";
+import { toast } from "vue3-toastify";
+
+import { useUserStore } from "@/stores/userStore.js";
+let { user_config } = useUserStore();
+
+import { useRentFacilityStore } from "@/stores/rentFacilityStore.js";
+let { saveSelectedFacility } = useRentFacilityStore();
+
+const storageTypes = ref();
+
+onMounted(() => {
+  fetchStorageTypes();
+});
+
+const fetchStorageTypes = async () => {
+  let response = null;
+  try {
+    response = await axios.get("/storage-type-list", user_config);
+  } catch (error) {
+    response = error.response;
+  }
+
+  if (response.status == 200) {
+    storageTypes.value = response.data;
+  } else {
+    toast.error("Error fetching storage types list");
+  }
+};
+const saveClickedType = (s_type) => {
+
+    saveSelectedFacility(s_type);
+}
 </script>
 <style scoped>
 </style>

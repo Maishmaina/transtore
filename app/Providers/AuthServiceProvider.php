@@ -17,7 +17,6 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         Admin::class => AdminPolicy::class
     ];
-
     /**
      * Register any authentication / authorization services.
      */

@@ -220,13 +220,19 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 import { toast } from "vue3-toastify";
 import NavLink from'@/components/NavLink.vue'
-import NavSubMenu from'@/components/NavSubMenu.vue'
+import NavSubMenu from '@/components/NavSubMenu.vue'
+
+import { useUserStore } from "@/stores/userStore";
 
 const router = useRouter()
 const { authUser, permissions, logout } = useAuthStore()
 
+const { userLogout } = useUserStore();
+
 const signOut = async () => {
-    let response = await logout()
+
+    if (permissions.length) {
+         let response = await logout()
 
     if (response.status == 200) {
         router.push({name: 'admin_login'})
@@ -234,6 +240,20 @@ const signOut = async () => {
         let err = response.data
         toast.error(err.message)
     }
+
+    } else {
+
+    let response = await userLogout()
+    if (response.status == 200) {
+        router.push({name: 'login'})
+    } else {
+        let err = response.data
+        toast.error(err.message)
+    }
+
+    }
+
+
 }
 
 </script>

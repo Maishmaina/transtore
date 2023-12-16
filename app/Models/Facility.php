@@ -52,6 +52,9 @@ class Facility extends Model
     {
         return $this->hasMany(FacilityReview::class);
     }
+    public function section(){
+        return $this->hasMany(Sections::class);
+    }
 
     public function coordinates(): Attribute
     {
@@ -89,5 +92,15 @@ class Facility extends Model
                 return $query->where('id', $facilityOwnerId);
             });
         });
+    }
+
+
+     public function scopeFacilityReviewAvg($query){
+        return $query->withCount('reviews')->with(['reviews' => function ($query) { $query->selectRaw('AVG(stars) as average_rating, facility_id')->groupBy('facility_id'); }]);
+    }
+    public function scopeReturnBasicUnits($query){
+        $result = $query->with('section.aisle.units' , function ($q){
+            $q->where('available_status','1');});
+       return $result;
     }
 }

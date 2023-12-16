@@ -34,12 +34,12 @@ import UserSetPassword from "@/pages/user/ResetPassword.vue";
 
 import Facility from "@/pages/user/Facility.vue";
 import RentFacility from "@/pages/user/RentFacility.vue";
+import RentFacilityDateLocation from "@/pages/user/RentFacilityDateLocation.vue";
+import RentalUnitSelection from "@/pages/user/RentalUnitSelection.vue";
 
 const checkGuest = (to, from) => {
-
     const { authUser } = useAuthStore();
     const { user } = useUserStore();
-
     if (authUser) {
         return {
             name: "home",
@@ -233,6 +233,16 @@ const router = createRouter({
                     name: "rent-facility",
                     component: RentFacility,
                 },
+                {
+                    path: "/facility-filter",
+                    name: "facility-filter",
+                    component: RentFacilityDateLocation,
+                },
+                {
+                    path: "/rent-facility-unit",
+                    name: "rent-facility-unit",
+                    component: RentalUnitSelection,
+                }
             ]
         }
     ],

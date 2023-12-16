@@ -16,4 +16,8 @@ class FacilityReview extends Model
         'message',
         'stars',
     ];
+
+    public function facilityRate(){
+        return $this->belongsTo(Facility::class);
+    }
 }

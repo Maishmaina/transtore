@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 export const useUserStore = defineStore(
     "userStore",
@@ -27,7 +27,29 @@ export const useUserStore = defineStore(
             }
             return result;
         }
-        return { user, registerUser, loginUser };
+        const userLogout = async () => {
+            let response = null;
+
+            try {
+                response = await axios.post("logout", user_config.value);
+            } catch (error) {
+                response = error.response;
+            }
+            if (response.status == 200) {
+                user.value = [];
+            }
+
+            return response;
+        };
+
+        const user_config = computed(() => {
+            return {
+                headers: {
+                    Authorization: `Bearer ${user.value.token}`,
+                },
+            };
+        });
+        return { user, user_config, registerUser, loginUser, userLogout };
     },
     {
         persist: true,

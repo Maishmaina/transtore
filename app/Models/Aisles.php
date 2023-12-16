@@ -14,4 +14,7 @@ class Aisles extends Model
      public function section(){
         return $this->belongsTo(Sections::class,'section_id');
     }
+    public function units(){
+        return $this->hasMany(Units::class,'aisle_id');
+    }
 }
